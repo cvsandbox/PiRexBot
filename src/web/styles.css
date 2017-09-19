@@ -11,21 +11,21 @@
 }
 
 .ui-page {
-    background-color: #E0E8E0 !important;
+    background-color: #E0E0E8 !important;
 }
 
 .ui-page .ui-header {
-    background-color: #00A040 !important;
-    background: linear-gradient(#008040, #00A040) !important;
+    background-color: #0040A0 !important;
+    background: linear-gradient(#004080, #0040A0) !important;
 }
 
 .ui-page .ui-footer {
     background-color: #008040 !important;
-    background: linear-gradient(#00A040, #008040) !important;
+    background: linear-gradient(#0040A0, #004080) !important;
 }
 
 .ui-page .ui-header .ui-btn-right {
-    background-color: #005020 !important;
+    background-color: #002050 !important;
 }
 
 .ui-page .ui-header .ui-btn-active {
@@ -47,9 +47,9 @@
 #cameraproperties {
     margin-left: 680px;
     width: 300px;
-    background-color: #D0E8D0;
+    background-color: #D0D0E8;
     padding: 10px;
-    border: 2px solid #00A040;
+    border: 2px solid #0040A0;
     border-radius: 10px;
 }
 
@@ -62,7 +62,7 @@
     padding: 10px 20px 10px 0;
     color: #FFFFFF;
     font-size: 12px;
-    text-shadow: 1px 1px 0px #006020;
+    text-shadow: 1px 1px 0px #002060;
 }
 #copyright a, a:focus, a:hover {
     color: #FFFFFF;
