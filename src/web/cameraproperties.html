@@ -1,0 +1,193 @@
+<div id="properties" style="display: none;">
+
+<div id="properties_list">
+</div>
+
+<button type="button" id="reset" onclick="resetToDefaults()">Reset to Defaults</button> 
+ 
+</div>
+
+<script>
+
+var config     = { };
+var properties = [ ];
+
+var configLoaded     = false;
+var propertiesLoaded = false;
+
+// Reset all camera's properties to their default values
+function resetToDefaults( )
+{
+    if ( configLoaded && propertiesLoaded )
+    {                
+        for ( var i = 0, len = properties.length; i < len; i++ )
+        {
+            if ( config[properties[i][0]] )
+            {
+                var jControl = $( "#" + properties[i][0] );
+                var control  = jControl[0];
+            
+                if ( properties[i][1].type == "int" )
+                {
+                    control.value = properties[i][1].def;
+                    control.onchange( );
+
+                    jControl.slider( "refresh" );
+                }
+                else if ( properties[i][1].type == "bool" )
+                {
+                    control.checked = ( properties[i][1].def == "1" );
+                    control.onclick( );
+                    
+                    jControl.checkboxradio( "refresh" );
+                }
+                else if ( properties[i][1].type == "select" )
+                {
+                    control.value = properties[i][1].def;
+                    control.onchange( );
+
+                    jControl.change( );
+                }
+            }
+        }
+        
+        $( "#properties_list" ).html( propertiesHtml ).trigger( 'create' );
+        $( "#properties" ).show( );
+    }
+}
+
+// Build HTML for camera's properties
+function showSettings( )
+{
+    if ( configLoaded && propertiesLoaded )
+    {
+        var propertiesHtml = "";
+                
+        for ( var i = 0, len = properties.length; i < len; i++ )
+        {
+            if ( config[properties[i][0]] )
+            {
+                var propertyHtml = "<div id=\"div_" + properties[i][0] + "\">";
+          
+                if ( properties[i][1].type == "int" )
+                {
+                    propertyHtml += "<label for=\"" + properties[i][0] + "\">" + properties[i][1].name + ":</label>";
+                    propertyHtml += "<input type=\"range\" id=\"" + properties[i][0] + "\" value=\"" + config[properties[i][0]] + "\" " ;
+                    propertyHtml += "min=\"" + properties[i][1].min + "\" max=\"" + properties[i][1].max + "\"";
+                    propertyHtml += "oninput=\"handleRangeProperty(this)\" onchange=\"handleRangeProperty(this)\" />";
+                    
+                }
+                else if ( properties[i][1].type == "bool" )
+                {
+                    var check = ( config[properties[i][0]] != "0" ) ? "checked " : "";
+                    
+                    propertyHtml += "<input id=\"" +  properties[i][0] + "\" type=\"checkbox\" " + check + "data-min=\"true\" onclick=\"handleBoolProperty(this);\" />";
+                    propertyHtml += "<label for=\"" + properties[i][0] +"\">" + properties[i][1].name + "</label>";
+                }
+                else if ( properties[i][1].type == "select" )
+                {                    
+                    propertyHtml += "<label for=\"" + properties[i][0] + "\">" + properties[i][1].name + ":</label>";
+                    propertyHtml += "<select id=\"" + properties[i][0] + "\" data-mini=\"true\" onchange=\"handleSelectionProperty(this)\">";
+                    
+                    for ( var j = 0, choicesCount = properties[i][1].choices.length; j < choicesCount; j++ )
+                    {
+                        var selected = ( properties[i][1].choices[j][0] == config[properties[i][0]] ) ? " selected" : "";
+                        
+                        propertyHtml += "<option value=\"" + properties[i][1].choices[j][0] + "\"" + selected + ">" + properties[i][1].choices[j][1] + "</option>";
+                    }
+                    
+                    propertyHtml += "</select>";
+                }
+                
+                propertyHtml   += "</div>";
+                propertiesHtml += propertyHtml;
+            }
+        }
+        
+        $( "#properties_list" ).html( propertiesHtml ).trigger( 'create' );
+        $( "#properties" ).show( );
+    }
+}
+
+// Load current values of camera's properties
+function loadCurrentSettings( )
+{
+    $.ajax( {
+        type        : "GET",
+        url         : "/camera/config",
+        contentType : "application/json; charset=utf-8",
+        async       : true,
+        success: function( data )
+        {
+            if ( data.status != "OK" )
+            {
+                console.log( "Failed getting camera properties" );
+            }
+            else
+            {
+                config = data.config;
+                configLoaded = true;
+                showSettings( );
+            }
+        },
+        failure: function( errMsg )
+        {
+            console.log( errMsg );
+        }
+    } );
+}
+
+// Load information about camera's properties, like name, type, min/max/default value
+function loadPropertiesInfo( )
+{
+    function compare( a, b )
+    {
+        if ( a[1].order < b[1].order )
+            return -1;
+        if ( a[1].order > b[1].order )
+            return 1;
+        return 0;
+    }
+    
+    $.ajax( {
+        type        : "GET",
+        url         : "/camera/properties",
+        contentType : "application/json; charset=utf-8",
+        async       : true,
+        success: function( data )
+        {
+            if ( data.status != "OK" )
+            {
+                console.log( "Failed getting camera properties" );
+            }
+            else
+            {
+                for ( var key in data.config )
+                {
+                    properties.push( [ key, data.config[key] ] );
+                }
+                                
+                properties.sort( compare );
+                
+                propertiesLoaded = true;
+                showSettings( );
+            }
+        },
+        failure: function( errMsg )
+        {
+            console.log( errMsg );
+        }
+    } );
+}
+
+function getSettings( )
+{
+    configLoaded     = false;
+    propertiesLoaded = false;
+
+    loadCurrentSettings( );
+    loadPropertiesInfo( );
+}
+
+getSettings( );
+</script>
