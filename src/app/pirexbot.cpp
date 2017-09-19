@@ -1,5 +1,5 @@
 /*
-    cam2web - streaming camera to web
+    PiRexBot - remote controlled bot based on RaspberryPi
 
     Copyright (C) 2017, cvsandbox, cvsandbox@gmail.com
 
@@ -51,11 +51,11 @@
 using namespace std;
 
 // Information provided on version request
-#define STR_INFO_PRODUCT        "cam2web"
-#define STR_INFO_VERSION        "1.1.0"
+#define STR_INFO_PRODUCT        "pirexbot"
+#define STR_INFO_VERSION        "1.0.0"
 #define STR_INFO_PLATFORM       "RaspberryPi"
 
-// Name of the device and default title of the camera
+// Name of the device and default title of the bot
 const char* DEVICE_NAME = "RaspberryPi Camera";
 
 XManualResetEvent ExitEvent;
@@ -113,7 +113,7 @@ void SetDefaultSettings( )
     Settings.JpegQuality = 10;
     Settings.WebPort     = 8000;
 
-    Settings.HtRealm = "cam2web";
+    Settings.HtRealm = "pirexbot";
     Settings.HtDigestFileName.clear( );
 
     Settings.ViewersGroup = UserGroup::Anyone;
@@ -292,7 +292,7 @@ bool ParseCommandLine( int argc, char* argv[] )
 
     if ( i != argc )
     {
-        printf( "cam2web - streaming camera to web \n" );
+        printf( "PiRexBot - remote controlled bot based on RaspberryPi \n" );
         printf( "Version: %s \n\n", STR_INFO_VERSION );
         printf( "Available command line options: \n" );
         printf( "  -size:<0-4> Sets video size to one from the list below: \n" );
@@ -308,23 +308,23 @@ bool ParseCommandLine( int argc, char* argv[] )
         printf( "  -port:<num> Port number for web server to listen on. \n" );
         printf( "              Default is 8000. \n" );
         printf( "  -realm:<?>  HTTP digest authentication domain. \n" );
-        printf( "              Default is 'cam2web'. \n" );
+        printf( "              Default is 'pirexbot'. \n" );
         printf( "  -htpass:<?> htdigest file containing list of users to access the camera. \n" );
         printf( "              Note: only users for the specified/default realm are loaded. \n" );
         printf( "              Note: if users file is specified, then by default only users \n" );
         printf( "                    from that list are allowed to view camera and only \n" );
         printf( "                    'admin' user is allowed to change its settings. \n" );
-        printf( "  -viewer:<?> Group of users allowed to view camera: any, user, admin. \n" );
+        printf( "  -viewer:<?> Group of users allowed to view camera of the bot: any, user, admin. \n" );
         printf( "              Default is 'any' if users file is not specified, \n" );
         printf( "              or 'user' otherwise. \n" );
-        printf( "  -config:<?> Group of users allowed to change camera settings. \n" );
+        printf( "  -config:<?> Group of users allowed to control the bot. \n" );
         printf( "              Default is 'any' if users file is not specified, \n" );
         printf( "              or 'admin' otherwise. \n" );
         printf( "  -fcfg:<?>   Name of the file to store camera settings in. \n" );
         printf( "              Default is '~/.cam_config'. \n" );
         printf( "  -web:<?>    Name of the folder to serve custom web content. \n" );
         printf( "              By default embedded web files are used. \n" );
-        printf( "  -title:<?>  Name of the camera to be shown in WebUI. \n" );
+        printf( "  -title:<?>  Name of the bot to be shown in WebUI. \n" );
         printf( "              Use double quotes if the name contains spaces. \n" );
         printf( "\n" );
 
@@ -419,7 +419,7 @@ int main( int argc, char* argv[] )
     else
     {
     #ifdef NDEBUG
-    // web content is embedded in release builds to get single executable
+        // web content is embedded in release builds to get single executable
         server.AddHandler( make_shared<XEmbeddedContentHandler>( "/", &web_index_html ), viewersGroup ).
                AddHandler( make_shared<XEmbeddedContentHandler>( "index.html", &web_index_html ), viewersGroup ).
                AddHandler( make_shared<XEmbeddedContentHandler>( "styles.css", &web_styles_css ), viewersGroup ).
