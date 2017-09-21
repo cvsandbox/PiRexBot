@@ -25,6 +25,8 @@
 #include <pwd.h>
 #include <linux/limits.h>
 #include <map>
+#include <chrono>
+#include <wiringPi.h>
 
 #include "XRaspiCamera.hpp"
 #include "XRaspiCameraConfig.hpp"
@@ -33,6 +35,8 @@
 #include "XObjectConfigurationSerializer.hpp"
 #include "XObjectConfigurationRequestHandler.hpp"
 #include "XManualResetEvent.hpp"
+
+#include "BotConfig.h"
 
 // Release build embeds web resources into executable
 #ifdef NDEBUG
@@ -49,6 +53,7 @@
 #endif
 
 using namespace std;
+using namespace std::chrono;
 
 // Information provided on version request
 #define STR_INFO_PRODUCT        "pirexbot"
@@ -334,6 +339,34 @@ bool ParseCommandLine( int argc, char* argv[] )
     return ret;
 }
 
+// Initialize the bot on the application start
+static void BotInit( )
+{
+    wiringPiSetupPhys( );
+
+#ifdef BOT_ON_LED_PIN
+    pinMode( BOT_ON_LED_PIN, OUTPUT );
+    digitalWrite( BOT_ON_LED_PIN, HIGH );
+#endif
+
+#ifdef BOT_ON_LED_PIN
+    pinMode( BOT_CONNECTION_ACTIVE_LED_PIN, OUTPUT );
+    digitalWrite( BOT_CONNECTION_ACTIVE_LED_PIN, LOW );
+#endif
+}
+
+// Clean-up the bot on the application exit
+static void BotShutDown( )
+{
+#ifdef BOT_ON_LED_PIN
+    digitalWrite( BOT_ON_LED_PIN, LOW );
+#endif
+
+#ifdef BOT_ON_LED_PIN
+    digitalWrite( BOT_CONNECTION_ACTIVE_LED_PIN, LOW );
+#endif
+}
+
 int main( int argc, char* argv[] )
 {
     struct sigaction sigIntAction;
@@ -345,6 +378,9 @@ int main( int argc, char* argv[] )
         return -1;
     }
 
+    // initialize the bot
+    BotInit( );
+    
     // set-up handler for certain signals
     sigIntAction.sa_handler = sigIntHandler;
     sigemptyset( &sigIntAction.sa_mask );
@@ -441,18 +477,31 @@ int main( int argc, char* argv[] )
     listenerChain.Add( video2web.VideoSourceListener( ) );
     listenerChain.Add( &cameraErrorListener );
     xcamera->SetListener( &listenerChain );
-
+    
     if ( server.Start( ) )
     {
+        int saveCounter = 0;
+        
         printf( "Web server started on port %d ...\n", server.Port( ) );
         printf( "Ctrl+C to stop.\n" );
 
         xcamera->Start( );
 
-        while ( !ExitEvent.Wait( 60000 ) )
+        while ( !ExitEvent.Wait( 1000 ) )
         {
-            // save camera settings from time to time
-            serializer.SaveConfiguration( );
+            if ( ++saveCounter == 60 )
+            {
+                // save camera settings from time to time
+                serializer.SaveConfiguration( );
+                saveCounter = 0;
+            }
+            
+        #ifdef BOT_CONNECTION_ACTIVE_LED_PIN    
+            bool wasAccessedAtAll    = false;
+            auto timeSinceLastAccess = duration_cast<milliseconds>( steady_clock::now( ) - server.LastAccessTime( &wasAccessedAtAll ) ).count( );
+            
+            digitalWrite( BOT_CONNECTION_ACTIVE_LED_PIN, ( timeSinceLastAccess < 2000 ) ? HIGH : LOW );
+        #endif
         }
 
         serializer.SaveConfiguration( );
@@ -466,6 +515,9 @@ int main( int argc, char* argv[] )
     {
         printf( "Failed starting web server on port %d\n", server.Port( ) );
     }
+    
+    // do whatever to nicely clean-up the bot
+    BotShutDown( );
 
     return 0;
 }

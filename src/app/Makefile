@@ -1,5 +1,5 @@
 #
-#   cam2web - streaming camera to web
+#   PiRexBot - remote controlled bot based on RaspberryPi
 #
 #   Copyright (C) 2017, cvsandbox, cvsandbox@gmail.com
 #
@@ -51,7 +51,7 @@ INCLUDE = -I../../externals/mongoose/ \
     -I/opt/vc/include/interface/vmcs_host/linux
 
 # Libraries to use
-LIBS = -lmmal_core -lmmal_util -lmmal_vc_client -lvcos -lbcm_host -ljpeg
+LIBS = -lmmal_core -lmmal_util -lmmal_vc_client -lvcos -lbcm_host -lwiringPi -ljpeg
 
 # Folders to look for additional libraries
 LIBDIR = -L/opt/vc/lib
