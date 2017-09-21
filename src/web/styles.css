@@ -15,17 +15,17 @@
 }
 
 .ui-page .ui-header {
-    background-color: #0040A0 !important;
-    background: linear-gradient(#004080, #0040A0) !important;
+    background-color: #0040C0 !important;
+    background: linear-gradient(#0040A0, #0040C0) !important;
 }
 
 .ui-page .ui-footer {
-    background-color: #008040 !important;
-    background: linear-gradient(#0040A0, #004080) !important;
+    background-color: #0040A0 !important;
+    background: linear-gradient(#0040C0, #0040A0) !important;
 }
 
 .ui-page .ui-header .ui-btn-right {
-    background-color: #002050 !important;
+    background-color: #002090 !important;
 }
 
 .ui-page .ui-header .ui-btn-active {
