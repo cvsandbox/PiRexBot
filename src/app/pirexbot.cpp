@@ -37,6 +37,7 @@
 #include "XManualResetEvent.hpp"
 
 #include "BotConfig.h"
+#include "MotorsController.hpp"
 
 // Release build embeds web resources into executable
 #ifdef NDEBUG
@@ -46,10 +47,17 @@
     #include "cam2web_white.png.h"
     #include "camera.js.h"
     #include "cameraproperties.html.h"
+    #include "botcontrols.html.h"
     #include "cameraproperties.js.h"
     #include "jquery.js.h"
     #include "jquery.mobile.js.h"
     #include "jquery.mobile.css.h"
+    #include "forward.png.h"
+    #include "backward.png.h"
+    #include "slight_left.png.h"
+    #include "slight_right.png.h"
+    #include "rotate_left.png.h"
+    #include "rotate_right.png.h"
 #endif
 
 using namespace std;
@@ -344,26 +352,26 @@ static void BotInit( )
 {
     wiringPiSetupPhys( );
 
-#ifdef BOT_ON_LED_PIN
-    pinMode( BOT_ON_LED_PIN, OUTPUT );
-    digitalWrite( BOT_ON_LED_PIN, HIGH );
+#ifdef BOT_PIN_ON_LED
+    pinMode( BOT_PIN_ON_LED, OUTPUT );
+    digitalWrite( BOT_PIN_ON_LED, HIGH );
 #endif
 
-#ifdef BOT_ON_LED_PIN
-    pinMode( BOT_CONNECTION_ACTIVE_LED_PIN, OUTPUT );
-    digitalWrite( BOT_CONNECTION_ACTIVE_LED_PIN, LOW );
+#ifdef BOT_PIN_CONNECTION_ACTIVE_LED
+    pinMode( BOT_PIN_CONNECTION_ACTIVE_LED, OUTPUT );
+    digitalWrite( BOT_PIN_CONNECTION_ACTIVE_LED, LOW );
 #endif
 }
 
 // Clean-up the bot on the application exit
 static void BotShutDown( )
 {
-#ifdef BOT_ON_LED_PIN
-    digitalWrite( BOT_ON_LED_PIN, LOW );
+#ifdef BOT_PIN_ON_LED
+    digitalWrite( BOT_PIN_ON_LED, LOW );
 #endif
 
-#ifdef BOT_ON_LED_PIN
-    digitalWrite( BOT_CONNECTION_ACTIVE_LED_PIN, LOW );
+#ifdef BOT_PIN_CONNECTION_ACTIVE_LED
+    digitalWrite( BOT_PIN_CONNECTION_ACTIVE_LED, LOW );
 #endif
 }
 
@@ -438,10 +446,14 @@ int main( int argc, char* argv[] )
 
     // restore camera settings
     serializer.LoadConfiguration( );
+    
+    // create motors' controller
+    shared_ptr<MotorsController> motorsController = make_shared<MotorsController>( );
 
     // add web handlers
     server.AddHandler( make_shared<XObjectInformationRequestHandler>( "/version", make_shared<XObjectInformationMap>( versionInfo ) ) ).
            AddHandler( make_shared<XObjectConfigurationRequestHandler>( "/camera/config", xcameraConfig ), configGroup ).
+           AddHandler( make_shared<XObjectConfigurationRequestHandler>( "/motors/config", motorsController ), configGroup ).
            AddHandler( make_shared<XObjectInformationRequestHandler>( "/camera/properties", make_shared<XRaspiCameraPropsInfo>( xcamera ) ), configGroup ).
            AddHandler( make_shared<XObjectInformationRequestHandler>( "/camera/info", make_shared<XObjectInformationMap>( cameraInfo ) ), viewersGroup ).
            AddHandler( video2web.CreateJpegHandler( "/camera/jpeg" ), viewersGroup ).
@@ -464,9 +476,17 @@ int main( int argc, char* argv[] )
                AddHandler( make_shared<XEmbeddedContentHandler>( "camera.js", &web_camera_js ), viewersGroup ).
                AddHandler( make_shared<XEmbeddedContentHandler>( "cameraproperties.js", &web_cameraproperties_js ), viewersGroup ).
                AddHandler( make_shared<XEmbeddedContentHandler>( "cameraproperties.html", &web_cameraproperties_html ), configGroup ).
+               AddHandler( make_shared<XEmbeddedContentHandler>( "botcontrols.html", &web_botcontrols_html ), configGroup ).
                AddHandler( make_shared<XEmbeddedContentHandler>( "jquery.js", &web_jquery_js ), viewersGroup ).
                AddHandler( make_shared<XEmbeddedContentHandler>( "jquery.mobile.js", &web_jquery_mobile_js ), viewersGroup ).
-               AddHandler( make_shared<XEmbeddedContentHandler>( "jquery.mobile.css", &web_jquery_mobile_css ), viewersGroup );
+               AddHandler( make_shared<XEmbeddedContentHandler>( "jquery.mobile.css", &web_jquery_mobile_css ), viewersGroup ).
+               AddHandler( make_shared<XEmbeddedContentHandler>( "forward.png", &web_forward_png ) ).
+               AddHandler( make_shared<XEmbeddedContentHandler>( "backward.png", &web_backward_png ) ).
+               AddHandler( make_shared<XEmbeddedContentHandler>( "slight_left.png", &web_slight_left_png ) ).
+               AddHandler( make_shared<XEmbeddedContentHandler>( "slight_right.png", &web_slight_right_png ) ).
+               AddHandler( make_shared<XEmbeddedContentHandler>( "rotate_left.png", &web_rotate_left_png ) ).
+               AddHandler( make_shared<XEmbeddedContentHandler>( "rotate_right.png", &web_rotate_right_png ) );
+               
     #endif
     }
 
@@ -496,11 +516,11 @@ int main( int argc, char* argv[] )
                 saveCounter = 0;
             }
             
-        #ifdef BOT_CONNECTION_ACTIVE_LED_PIN    
+        #ifdef BOT_PIN_CONNECTION_ACTIVE_LED    
             bool wasAccessedAtAll    = false;
             auto timeSinceLastAccess = duration_cast<milliseconds>( steady_clock::now( ) - server.LastAccessTime( &wasAccessedAtAll ) ).count( );
             
-            digitalWrite( BOT_CONNECTION_ACTIVE_LED_PIN, ( timeSinceLastAccess < 2000 ) ? HIGH : LOW );
+            digitalWrite( BOT_PIN_CONNECTION_ACTIVE_LED, ( timeSinceLastAccess < 2000 ) ? HIGH : LOW );
         #endif
         }
 

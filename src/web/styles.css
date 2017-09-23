@@ -54,7 +54,7 @@
 }
 
 #camera {
-    border: 10px #333333 solid;
+    border: 10px #001060 solid;
 }
 
 #copyright {
@@ -66,4 +66,48 @@
 }
 #copyright a, a:focus, a:hover {
     color: #FFFFFF;
+}
+
+#motor_control {
+    margin-left: 680px;
+    width: 312px;
+    background-color: #D0D0E8;
+    padding: 20px;
+    border: 2px solid #0040A0;
+    border-radius: 10px;
+}
+
+.ui-block-a {
+    width: 106px !important;
+}
+.ui-block-b {
+    width: 106px !important;
+}
+.ui-block-c {
+    width: 100px !important;
+}
+
+#buttonForward {
+    background-image: url(forward.png);   
+}
+#buttonBackward {
+    background-image: url(backward.png);   
+}
+#buttonSlightLeft {
+    background-image: url(slight_left.png);   
+}
+#buttonSlightRight {
+    background-image: url(slight_right.png);   
+}
+#buttonRotateLeft {
+    background-image: url(rotate_left.png);   
+}
+#buttonRotateRight {
+    background-image: url(rotate_right.png);   
+}
+
+.derectionButton {
+    background-repeat: no-repeat; 
+    width: 100px !important;
+    height: 100px !important;
 }

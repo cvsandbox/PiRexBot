@@ -25,7 +25,7 @@ VPATH = ../../externals/mongoose/ \
 # C code
 SRC_C = mongoose.c 
 # C++ code
-SRC_CPP = pirexbot.cpp XImage.cpp XJpegEncoder.cpp XManualResetEvent.cpp \
+SRC_CPP = pirexbot.cpp MotorsController.cpp XImage.cpp XJpegEncoder.cpp XManualResetEvent.cpp \
     XRaspiCamera.cpp XRaspiCameraConfig.cpp XVideoSourceToWeb.cpp XWebServer.cpp \
     XSimpleJsonParser.cpp XObjectConfigurationSerializer.cpp \
     XObjectConfigurationRequestHandler.cpp XStringTools.cpp \
@@ -123,11 +123,18 @@ generateweb:
 	$(WEB2H) -i $(OUT_INC)cam2web.png -o $(OUT_INC)cam2web.png.h
 	$(WEB2H) -i $(OUT_INC)cam2web_white.png -o $(OUT_INC)cam2web_white.png.h
 	$(WEB2H) -i $(OUT_INC)cameraproperties.html -o $(OUT_INC)cameraproperties.html.h
+	$(WEB2H) -i $(OUT_INC)botcontrols.html -o $(OUT_INC)botcontrols.html.h
 	$(WEB2H) -i $(OUT_INC)camera.js -o $(OUT_INC)camera.js.h
 	$(WEB2H) -i $(OUT_INC)cameraproperties.js -o $(OUT_INC)cameraproperties.js.h
 	$(WEB2H) -i $(OUT_INC)jquery.js -o $(OUT_INC)jquery.js.h
 	$(WEB2H) -i $(OUT_INC)jquery.mobile.js -o $(OUT_INC)jquery.mobile.js.h
 	$(WEB2H) -i $(OUT_INC)jquery.mobile.css -o $(OUT_INC)jquery.mobile.css.h
+	$(WEB2H) -i $(OUT_INC)forward.png -o $(OUT_INC)forward.png.h
+	$(WEB2H) -i $(OUT_INC)backward.png -o $(OUT_INC)backward.png.h
+	$(WEB2H) -i $(OUT_INC)slight_left.png -o $(OUT_INC)slight_left.png.h
+	$(WEB2H) -i $(OUT_INC)slight_right.png -o $(OUT_INC)slight_right.png.h
+	$(WEB2H) -i $(OUT_INC)rotate_left.png -o $(OUT_INC)rotate_left.png.h
+	$(WEB2H) -i $(OUT_INC)rotate_right.png -o $(OUT_INC)rotate_right.png.h
 	rm $(OUT_INC)*.html
 	rm $(OUT_INC)*.css
 	rm $(OUT_INC)*.js

@@ -1,0 +1,69 @@
+<div id="motor_control" class="ui-grid-a">
+    <div class="ui-block-a">
+        <button type="button" id="buttonSlightLeft" class="derectionButton" onmousedown="mouseDown(0, 100)" onmouseup="mouseUp(this)" onmouseout="mouseLost(this)"></button>
+        <button type="button" id="buttonRotateLeft" class="derectionButton" onmousedown="mouseDown(-100, 100)" onmouseup="mouseUp(this)" onmouseout="mouseLost(this)"></button>
+    </div>
+    <div class="ui-block-b">
+        <button type="button" id="buttonForward" class="derectionButton" onmousedown="mouseDown(100, 100)" onmouseup="mouseUp(this)" onmouseout="mouseLost(this)"></button>
+        <button type="button" id="buttonBackward" class="derectionButton" onmousedown="mouseDown(-100, -100)" onmouseup="mouseUp(this)" onmouseout="mouseLost(this)"></button>
+    </div>
+    <div class="ui-block-c">
+        <button type="button" id="buttonSlightRight" class="derectionButton" onmousedown="mouseDown(100, 0)" onmouseup="mouseUp(this)" onmouseout="mouseLost(this)"></button>
+        <button type="button" id="buttonRotateRight" class="derectionButton" onmousedown="mouseDown(100, -100)" onmouseup="mouseUp(this)" onmouseout="mouseLost(this)"></button>
+    </div>
+</div>
+
+<script>
+var mouseOn = false;
+
+function mouseDown( leftPower, rightPower )
+{
+    mouseOn = true;
+    setMotorsPower( leftPower, rightPower );
+}
+
+function mouseUp( button )
+{
+    mouseOn = false;
+    button.blur( );
+    setMotorsPower( 0, 0 );
+}
+
+function mouseLost( button )
+{
+    if ( mouseOn )
+    {
+        mouseOn = false;
+        button.blur( );
+        setMotorsPower( 0, 0 );
+    }
+}
+
+function setMotorsPower( leftPower, rightPower )
+{
+    var variablesMap = { };
+    
+    variablesMap["leftPower"]  = leftPower;
+    variablesMap["rightPower"] = rightPower;
+
+    $.ajax( {
+        type        : "POST",
+        url         : "/motors/config",
+        data        : JSON.stringify( variablesMap ),
+        contentType : "application/json; charset=utf-8",
+        dataType    : "json",
+        async       : true,
+        success: function( data )
+        {
+            if ( data.status != "OK" )
+            {
+                console.log( "Failed setting motors property: " + data.status );
+            }
+        },
+        failure: function( errMsg )
+        {
+            console.log( errMsg );
+        }
+    } );
+}
+</script>

@@ -22,7 +22,7 @@
 <div data-role="header" data-theme="b">
     <img width="32" height="32" src="cam2web_white.png" style="float:left;display:inline;margin-left:10px;margin-top:5px"/>
     <h1 id="title">Remote Camera</h1>
-    <a href="index.html" id="settingsButton" data-icon="gear" class="ui-btn-right">Settings</a>
+    <a href="index.html" id="controlButton" data-icon="gear" class="ui-btn-right">Control</a>
 </div>
 
 <div data-role="content">
@@ -31,7 +31,7 @@
     <img id="camera" width="640" height="480">
 </div>
 
-<div id="cameraproperties" style="display: none;">
+<div id="botcontrols" style="display: none;">
 </div>
 
 </div>
@@ -73,7 +73,7 @@ function getCameraInfo( )
                 $('#cameracontainer').width( cameraWidth + 20 );
                 $('#cameraproperties').css( { 'margin-left' : cameraWidth + 40 } );
 
-                document.title = 'web2cam :: ' + config.device;
+                document.title = 'PiRexBot :: ' + config.device;
             }
         },
         failure: function( errMsg )
@@ -100,39 +100,41 @@ function getVersionInfo( )
     } );
 }
 
-var showingSettings = false;
+var showingControls = false;
 
 // Load camera settings controls
 function showSettings( )
 {
-    if ( !showingSettings )
+    if ( !showingControls )
     {
         var timeNow = new Date( ).getTime( );
 
         $.ajax({
-            url: '/cameraproperties.html?=' + timeNow,
+            url: '/botcontrols.html?=' + timeNow,
 
             success: function(data)
             {
-                $( "#cameraproperties" ).html( data ).trigger( 'create' );
-                $( "#cameraproperties" ).show( );
+                $( "#botcontrols" ).html( data ).trigger( 'create' );
+                $( "#botcontrols" ).show( );
                 
-                $( "#settingsButton" ).addClass( 'ui-btn-active' );
-                showingSettings = true;
+                $( "#controlButton" ).addClass( 'ui-btn-active' );
+                showingControls = true;
             }
         });
     }
     else
     {
-        $( "#cameraproperties" ).hide( );
-        $( "#settingsButton" ).removeClass( 'ui-btn-active' );
-        showingSettings = false;
+        $( "#botcontrols" ).hide( );
+        $( "#controlButton" ).removeClass( 'ui-btn-active' );
+        showingControls = false;
     }
+    
+    $( "#controlButton" ).blur( );
 
     return false;
 }
 
-document.getElementById( 'settingsButton' ).onclick = showSettings;
+document.getElementById( 'controlButton' ).onclick = showSettings;
 
 // get camera information like name, width, height
 getCameraInfo( );

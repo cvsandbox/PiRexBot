@@ -21,10 +21,22 @@
 #ifndef PIREXBOT_CONFIG_H
 #define PIREXBOT_CONFIG_H
 
+// ===== LEDs 'configuration =====
+
 // Pin number for the LED, which is switched on while the PiRexBot application runs
-#define BOT_ON_LED_PIN (11)
+#define BOT_PIN_ON_LED (7)
 
 // Pin number for the LED, which is switched on while there is an active connection to the bot
-#define BOT_CONNECTION_ACTIVE_LED_PIN (7)
+#define BOT_PIN_CONNECTION_ACTIVE_LED (11)
+
+// ===== Motors' configuration =====
+
+#define BOT_PIN_MOTOR1_ENABLE (12)
+#define BOT_PIN_MOTOR1_INPUT1 (18)
+#define BOT_PIN_MOTOR1_INPUT2 (16)
+
+#define BOT_PIN_MOTOR2_ENABLE (33)
+#define BOT_PIN_MOTOR2_INPUT1 (31)
+#define BOT_PIN_MOTOR2_INPUT2 (29)
 
 #endif // PIREXBOT_CONFIG_H
