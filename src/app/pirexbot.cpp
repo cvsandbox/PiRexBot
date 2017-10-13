@@ -388,7 +388,7 @@ int main( int argc, char* argv[] )
 
     // initialize the bot
     BotInit( );
-    
+
     // set-up handler for certain signals
     sigIntAction.sa_handler = sigIntHandler;
     sigemptyset( &sigIntAction.sa_mask );
@@ -404,7 +404,7 @@ int main( int argc, char* argv[] )
     shared_ptr<XRaspiCamera>         xcamera       = XRaspiCamera::Create( );
     shared_ptr<IObjectConfigurator>  xcameraConfig = make_shared<XRaspiCameraConfig>( xcamera );
     XObjectConfigurationSerializer   serializer( Settings.CameraConfigFileName, xcameraConfig );
-    
+
     // some read-only information about the version
     PropertyMap versionInfo;
 
@@ -446,7 +446,7 @@ int main( int argc, char* argv[] )
 
     // restore camera settings
     serializer.LoadConfiguration( );
-    
+
     // create motors' controller
     shared_ptr<MotorsController> motorsController = make_shared<MotorsController>( );
 
@@ -486,7 +486,7 @@ int main( int argc, char* argv[] )
                AddHandler( make_shared<XEmbeddedContentHandler>( "slight_right.png", &web_slight_right_png ) ).
                AddHandler( make_shared<XEmbeddedContentHandler>( "rotate_left.png", &web_rotate_left_png ) ).
                AddHandler( make_shared<XEmbeddedContentHandler>( "rotate_right.png", &web_rotate_right_png ) );
-               
+
     #endif
     }
 
@@ -497,11 +497,11 @@ int main( int argc, char* argv[] )
     listenerChain.Add( video2web.VideoSourceListener( ) );
     listenerChain.Add( &cameraErrorListener );
     xcamera->SetListener( &listenerChain );
-    
+
     if ( server.Start( ) )
     {
         int saveCounter = 0;
-        
+
         printf( "Web server started on port %d ...\n", server.Port( ) );
         printf( "Ctrl+C to stop.\n" );
 
@@ -515,11 +515,19 @@ int main( int argc, char* argv[] )
                 serializer.SaveConfiguration( );
                 saveCounter = 0;
             }
-            
-        #ifdef BOT_PIN_CONNECTION_ACTIVE_LED    
-            bool wasAccessedAtAll    = false;
-            auto timeSinceLastAccess = duration_cast<milliseconds>( steady_clock::now( ) - server.LastAccessTime( &wasAccessedAtAll ) ).count( );
-            
+
+            // stop motors if there was no related activity
+            auto timeSinceMotorAccess = duration_cast<milliseconds>( steady_clock::now( ) - server.LastAccessTime( "/motors/config" ) ).count( );
+
+            if ( timeSinceMotorAccess >= 1000 )
+            {
+                motorsController->Stop( );
+            }
+
+        #ifdef BOT_PIN_CONNECTION_ACTIVE_LED
+            // update activity LED
+            auto timeSinceLastAccess = duration_cast<milliseconds>( steady_clock::now( ) - server.LastAccessTime( ) ).count( );
+
             digitalWrite( BOT_PIN_CONNECTION_ACTIVE_LED, ( timeSinceLastAccess < 2000 ) ? HIGH : LOW );
         #endif
         }
@@ -535,7 +543,7 @@ int main( int argc, char* argv[] )
     {
         printf( "Failed starting web server on port %d\n", server.Port( ) );
     }
-    
+
     // do whatever to nicely clean-up the bot
     BotShutDown( );
 

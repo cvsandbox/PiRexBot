@@ -58,54 +58,64 @@ void MotorsController::Run( int8_t leftPower, int8_t rightPower )
 // Set power of the left motor
 void MotorsController::SetLeftPower( int8_t power )
 {
-    leftMotorPower = ( power > 100 ) ? 100 : ( ( power < -100 ) ? -100 : power );
+    power = ( power > 100 ) ? 100 : ( ( power < -100 ) ? -100 : power );
     
-    if ( leftMotorPower == 0 )
+    if ( leftMotorPower != power )
     {
-        digitalWrite( BOT_PIN_MOTOR1_ENABLE, LOW );
-        digitalWrite( BOT_PIN_MOTOR1_INPUT1, LOW );
-        digitalWrite( BOT_PIN_MOTOR1_INPUT2, LOW );
-    }
-    else
-    {
-        if ( leftMotorPower > 0 )
+        leftMotorPower = power;
+        
+        if ( leftMotorPower == 0 )
         {
-            digitalWrite( BOT_PIN_MOTOR1_INPUT1, HIGH );
+            digitalWrite( BOT_PIN_MOTOR1_ENABLE, LOW );
+            digitalWrite( BOT_PIN_MOTOR1_INPUT1, LOW );
             digitalWrite( BOT_PIN_MOTOR1_INPUT2, LOW );
         }
         else
         {
-            digitalWrite( BOT_PIN_MOTOR1_INPUT1, LOW );
-            digitalWrite( BOT_PIN_MOTOR1_INPUT2, HIGH );
+            if ( leftMotorPower > 0 )
+            {
+                digitalWrite( BOT_PIN_MOTOR1_INPUT1, HIGH );
+                digitalWrite( BOT_PIN_MOTOR1_INPUT2, LOW );
+            }
+            else
+            {
+                digitalWrite( BOT_PIN_MOTOR1_INPUT1, LOW );
+                digitalWrite( BOT_PIN_MOTOR1_INPUT2, HIGH );
+            }
+            digitalWrite( BOT_PIN_MOTOR1_ENABLE, HIGH );
         }
-        digitalWrite( BOT_PIN_MOTOR1_ENABLE, HIGH );
     }
 }
 
 // Set power of the right motor
 void MotorsController::SetRightPower( int8_t power )
 {
-    rightMotorPower = ( power > 100 ) ? 100 : ( ( power < -100 ) ? -100 : power );
+    power = ( power > 100 ) ? 100 : ( ( power < -100 ) ? -100 : power );
     
-    if ( rightMotorPower == 0 )
+    if ( rightMotorPower != power )
     {
-        digitalWrite( BOT_PIN_MOTOR2_ENABLE, LOW );
-        digitalWrite( BOT_PIN_MOTOR2_INPUT1, LOW );
-        digitalWrite( BOT_PIN_MOTOR2_INPUT2, LOW );
-    }
-    else
-    {
-        if ( rightMotorPower > 0 )
+        rightMotorPower = power;
+        
+        if ( rightMotorPower == 0 )
         {
-            digitalWrite( BOT_PIN_MOTOR2_INPUT1, HIGH );
+            digitalWrite( BOT_PIN_MOTOR2_ENABLE, LOW );
+            digitalWrite( BOT_PIN_MOTOR2_INPUT1, LOW );
             digitalWrite( BOT_PIN_MOTOR2_INPUT2, LOW );
         }
         else
         {
-            digitalWrite( BOT_PIN_MOTOR2_INPUT1, LOW );
-            digitalWrite( BOT_PIN_MOTOR2_INPUT2, HIGH );
+            if ( rightMotorPower > 0 )
+            {
+                digitalWrite( BOT_PIN_MOTOR2_INPUT1, HIGH );
+                digitalWrite( BOT_PIN_MOTOR2_INPUT2, LOW );
+            }
+            else
+            {
+                digitalWrite( BOT_PIN_MOTOR2_INPUT1, LOW );
+                digitalWrite( BOT_PIN_MOTOR2_INPUT2, HIGH );
+            }
+            digitalWrite( BOT_PIN_MOTOR2_ENABLE, HIGH );
         }
-        digitalWrite( BOT_PIN_MOTOR2_ENABLE, HIGH );
     }    
 }
 

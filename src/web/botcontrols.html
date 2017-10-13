@@ -15,34 +15,51 @@
 
 <script>
 var mouseOn = false;
+var leftMotorPower  = 0;
+var rightMotorPower = 0;
+
+function updateMotorState( )
+{
+    // We need to keep sending updates to motor power state.
+    // If robot does not get any updates within half a second, it stops moving for safety.
+    if ( mouseOn )
+    {
+        setTimeout( updateMotorState, 100 );
+    }
+
+    setMotorsPower( leftMotorPower, rightMotorPower );
+}
 
 function mouseDown( leftPower, rightPower )
 {
     mouseOn = true;
-    setMotorsPower( leftPower, rightPower );
+    leftMotorPower  = leftPower;
+    rightMotorPower = rightPower;
+    updateMotorState( );
 }
 
 function mouseUp( button )
 {
     mouseOn = false;
+    leftMotorPower  = 0;
+    rightMotorPower = 0;
+    updateMotorState( );
+
     button.blur( );
-    setMotorsPower( 0, 0 );
 }
 
 function mouseLost( button )
 {
     if ( mouseOn )
     {
-        mouseOn = false;
-        button.blur( );
-        setMotorsPower( 0, 0 );
+        mouseUp( button );
     }
 }
 
 function setMotorsPower( leftPower, rightPower )
 {
     var variablesMap = { };
-    
+
     variablesMap["leftPower"]  = leftPower;
     variablesMap["rightPower"] = rightPower;
 
