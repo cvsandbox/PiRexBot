@@ -120,8 +120,8 @@ generateweb:
 	cp ../../externals/jquery/*.css $(OUT_INC)
 	$(WEB2H) -i $(OUT_INC)index.html -o $(OUT_INC)index.html.h
 	$(WEB2H) -i $(OUT_INC)styles.css -o $(OUT_INC)styles.css.h
-	$(WEB2H) -i $(OUT_INC)cam2web.png -o $(OUT_INC)cam2web.png.h
-	$(WEB2H) -i $(OUT_INC)cam2web_white.png -o $(OUT_INC)cam2web_white.png.h
+	$(WEB2H) -i $(OUT_INC)pirex.png -o $(OUT_INC)pirex.png.h
+	$(WEB2H) -i $(OUT_INC)pirex_white.png -o $(OUT_INC)pirex_white.png.h
 	$(WEB2H) -i $(OUT_INC)cameraproperties.html -o $(OUT_INC)cameraproperties.html.h
 	$(WEB2H) -i $(OUT_INC)botcontrols.html -o $(OUT_INC)botcontrols.html.h
 	$(WEB2H) -i $(OUT_INC)camera.js -o $(OUT_INC)camera.js.h
