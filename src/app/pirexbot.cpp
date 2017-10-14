@@ -69,7 +69,11 @@ using namespace std::chrono;
 #define STR_INFO_PLATFORM       "RaspberryPi"
 
 // Name of the device and default title of the bot
-const char* DEVICE_NAME = "RaspberryPi Camera";
+#define BOT_NAME                "PiRex Bot"
+
+// Name of camera device and default title
+#define CAMERA_NAME             "RaspberryPi Camera"
+#define CAMERA_TITLE            "Front Camera"
 
 XManualResetEvent ExitEvent;
 
@@ -85,7 +89,7 @@ struct
     string   HtDigestFileName;
     string   CameraConfigFileName;
     string   CustomWebContent;
-    string   CameraTitle;
+    string   BotTitle;
 
     UserGroup ViewersGroup;
     UserGroup ConfigGroup;
@@ -146,7 +150,7 @@ void SetDefaultSettings( )
     Settings.CustomWebContent = "./web";
 #endif
 
-    Settings.CameraTitle = DEVICE_NAME;
+    Settings.BotTitle = BOT_NAME;
 }
 
 // Parse command line and override default settings
@@ -277,7 +281,7 @@ bool ParseCommandLine( int argc, char* argv[] )
         }
         else if ( key == "title" )
         {
-            Settings.CameraTitle = value;
+            Settings.BotTitle = value;
         }
         else
         {
@@ -419,10 +423,16 @@ int main( int argc, char* argv[] )
     sprintf( strVideoSize,      "%u", Settings.FrameWidth );
     sprintf( strVideoSize + 16, "%u", Settings.FrameHeight );
 
-    cameraInfo.insert( PropertyMap::value_type( "device", DEVICE_NAME ) );
-    cameraInfo.insert( PropertyMap::value_type( "title",  Settings.CameraTitle ) );
+    cameraInfo.insert( PropertyMap::value_type( "device", CAMERA_NAME ) );
+    cameraInfo.insert( PropertyMap::value_type( "title",  CAMERA_TITLE ) );
     cameraInfo.insert( PropertyMap::value_type( "width",  strVideoSize ) );
     cameraInfo.insert( PropertyMap::value_type( "height", strVideoSize + 16 ) );
+
+    // prepare some read-only information properties of the bot
+    PropertyMap botInfo;
+
+    botInfo.insert( PropertyMap::value_type( "device", BOT_NAME ) );
+    botInfo.insert( PropertyMap::value_type( "title",  Settings.BotTitle ) );
 
     // create and configure web server
     XWebServer          server( "", Settings.WebPort );
@@ -456,6 +466,7 @@ int main( int argc, char* argv[] )
            AddHandler( make_shared<XObjectConfigurationRequestHandler>( "/motors/config", motorsController ), configGroup ).
            AddHandler( make_shared<XObjectInformationRequestHandler>( "/camera/properties", make_shared<XRaspiCameraPropsInfo>( xcamera ) ), configGroup ).
            AddHandler( make_shared<XObjectInformationRequestHandler>( "/camera/info", make_shared<XObjectInformationMap>( cameraInfo ) ), viewersGroup ).
+           AddHandler( make_shared<XObjectInformationRequestHandler>( "/info", make_shared<XObjectInformationMap>( botInfo ) ), viewersGroup ).
            AddHandler( video2web.CreateJpegHandler( "/camera/jpeg" ), viewersGroup ).
            AddHandler( video2web.CreateMjpegHandler( "/camera/mjpeg", Settings.FrameRate ), viewersGroup );
 

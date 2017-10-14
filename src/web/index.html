@@ -1,4 +1,4 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8">
@@ -12,7 +12,7 @@
     $(document).bind('mobileinit', function () {
         $.mobile.activeBtnClass = 'unused';
     });
-    </script>    
+    </script>
     <script src="jquery.mobile.js"></script>
 </head>
 <body>
@@ -36,13 +36,47 @@
 
 </div>
 
-<div data-role="footer" data-theme="b"> 
+<div data-role="footer" data-theme="b">
     <div id="copyright"><a href="https://github.com/cvsandbox/PiRexBot" target="_blank">PiRex Bot</a><span id="version"></span> :: Copyright © 2017 cvsandbox<div>
 </div>
 
 </div>
 
 <script>
+
+function getBotInfo( )
+{
+    $.ajax( {
+        type        : "GET",
+        url         : "/info",
+        contentType : "application/json; charset=utf-8",
+        async       : true,
+        success: function( data )
+        {
+            if ( data.status == "OK" )
+            {
+                var title  = "";
+                var config = data.config;
+
+                if ( ( config.title ) && ( config.title.length != 0 ) )
+                {
+                    title = config.title;
+                }
+                else
+                {
+                    title = config.device;
+                }
+
+                $('#title').html( title );
+                document.title = 'PiRexBot :: ' + title;
+            }
+        },
+        failure: function( errMsg )
+        {
+            console.log( errMsg );
+        }
+    } );
+}
 
 function getCameraInfo( )
 {
@@ -55,25 +89,14 @@ function getCameraInfo( )
         {
             if ( data.status == "OK" )
             {
-                config = data.config;
+                var config      = data.config;
                 var cameraWidth = parseInt( config.width );
 
-                if ( ( config.title ) && ( config.title.length != 0 ) )
-                {
-                    $('#title').html( config.title );
-                }
-                else
-                {
-                    $('#title').html( config.device );
-                }
-                
                 $('#camera').width( config.width );
                 $('#camera').height( config.height );
-                
+
                 $('#cameracontainer').width( cameraWidth + 20 );
                 $('#cameraproperties').css( { 'margin-left' : cameraWidth + 40 } );
-
-                document.title = 'PiRexBot :: ' + config.device;
             }
         },
         failure: function( errMsg )
@@ -116,7 +139,7 @@ function showSettings( )
             {
                 $( "#botcontrols" ).html( data ).trigger( 'create' );
                 $( "#botcontrols" ).show( );
-                
+
                 $( "#controlButton" ).addClass( 'ui-btn-active' );
                 showingControls = true;
             }
@@ -128,7 +151,7 @@ function showSettings( )
         $( "#controlButton" ).removeClass( 'ui-btn-active' );
         showingControls = false;
     }
-    
+
     $( "#controlButton" ).blur( );
 
     return false;
@@ -136,7 +159,8 @@ function showSettings( )
 
 document.getElementById( 'controlButton' ).onclick = showSettings;
 
-// get camera information like name, width, height
+// get bot and camera information like name, width, height
+getBotInfo( );
 getCameraInfo( );
 // get version of the streamer
 getVersionInfo( );
