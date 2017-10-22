@@ -24,6 +24,10 @@
 #include <list>
 #include <wiringPi.h>
 
+#ifdef BOT_MOTORS_ENABLE_SOFT_PWM
+    #include <softPwm.h>
+#endif
+
 using namespace std;
 
 const static string  PROP_LEFT_POWER  = "leftPower";
@@ -34,13 +38,19 @@ list<string> SupportedProperties = { PROP_LEFT_POWER, PROP_RIGHT_POWER };
 MotorsController::MotorsController( ) :
     leftMotorPower( 0 ), rightMotorPower( 0 )
 {
-    pinMode( BOT_PIN_MOTOR1_ENABLE, OUTPUT );
-    pinMode( BOT_PIN_MOTOR1_INPUT1, OUTPUT );
-    pinMode( BOT_PIN_MOTOR1_INPUT2, OUTPUT );
+#ifdef BOT_MOTORS_ENABLE_SOFT_PWM
+    softPwmCreate( BOT_PIN_MOTOR_LEFT_ENABLE, 0, 100 );
+    softPwmCreate( BOT_PIN_MOTOR_RIGHT_ENABLE, 0, 100 );
+#else
+    pinMode( BOT_PIN_MOTOR_LEFT_ENABLE, OUTPUT );
+    pinMode( BOT_PIN_MOTOR_RIGHT_ENABLE, OUTPUT );
+#endif
+
+    pinMode( BOT_PIN_MOTOR_LEFT_INPUT1, OUTPUT );
+    pinMode( BOT_PIN_MOTOR_LEFT_INPUT2, OUTPUT );
  
-    pinMode( BOT_PIN_MOTOR2_ENABLE, OUTPUT );
-    pinMode( BOT_PIN_MOTOR2_INPUT1, OUTPUT );
-    pinMode( BOT_PIN_MOTOR2_INPUT2, OUTPUT );
+    pinMode( BOT_PIN_MOTOR_RIGHT_INPUT1, OUTPUT );
+    pinMode( BOT_PIN_MOTOR_RIGHT_INPUT2, OUTPUT );
 }
 
 MotorsController::~MotorsController( )
@@ -55,35 +65,60 @@ void MotorsController::Run( int8_t leftPower, int8_t rightPower )
     SetRightPower( rightPower );
 }
 
+// Helper function to set state/direction of motor controlled with L293D chip
+static void SetMotorPower( int8_t power, uint8_t enablePin, uint8_t inputPin1, uint8_t inputPin2 )
+{
+    #ifndef BOT_MOTORS_ENABLE_SOFT_PWM
+        if ( power > 0 )
+        {
+            power = ( power > 50 ) ? 100 : 0;
+        }
+        else
+        {
+            power = ( power < -50 ) ? -100 : 0;
+        }
+    #endif
+    
+    if ( power == 0 )
+    {
+        #ifdef BOT_MOTORS_ENABLE_SOFT_PWM
+            softPwmWrite( enablePin, 0 );
+        #else
+            digitalWrite( enablePin, LOW );
+        #endif
+        digitalWrite( inputPin1, LOW );
+        digitalWrite( inputPin2, LOW );
+    }
+    else
+    {
+        if ( power > 0 )
+        {
+            digitalWrite( inputPin1, HIGH );
+            digitalWrite( inputPin2, LOW );
+        }
+        else
+        {
+            digitalWrite( inputPin1, LOW );
+            digitalWrite( inputPin2, HIGH );
+        }
+        
+        #ifdef BOT_MOTORS_ENABLE_SOFT_PWM
+            softPwmWrite( enablePin, ( power > 0 ) ? power : -power  );
+        #else
+            digitalWrite( enablePin, HIGH );
+        #endif
+    }
+}
+
 // Set power of the left motor
 void MotorsController::SetLeftPower( int8_t power )
 {
     power = ( power > 100 ) ? 100 : ( ( power < -100 ) ? -100 : power );
-    
+        
     if ( leftMotorPower != power )
     {
         leftMotorPower = power;
-        
-        if ( leftMotorPower == 0 )
-        {
-            digitalWrite( BOT_PIN_MOTOR1_ENABLE, LOW );
-            digitalWrite( BOT_PIN_MOTOR1_INPUT1, LOW );
-            digitalWrite( BOT_PIN_MOTOR1_INPUT2, LOW );
-        }
-        else
-        {
-            if ( leftMotorPower > 0 )
-            {
-                digitalWrite( BOT_PIN_MOTOR1_INPUT1, HIGH );
-                digitalWrite( BOT_PIN_MOTOR1_INPUT2, LOW );
-            }
-            else
-            {
-                digitalWrite( BOT_PIN_MOTOR1_INPUT1, LOW );
-                digitalWrite( BOT_PIN_MOTOR1_INPUT2, HIGH );
-            }
-            digitalWrite( BOT_PIN_MOTOR1_ENABLE, HIGH );
-        }
+        SetMotorPower( power, BOT_PIN_MOTOR_LEFT_ENABLE, BOT_PIN_MOTOR_LEFT_INPUT1, BOT_PIN_MOTOR_LEFT_INPUT2 );
     }
 }
 
@@ -95,27 +130,7 @@ void MotorsController::SetRightPower( int8_t power )
     if ( rightMotorPower != power )
     {
         rightMotorPower = power;
-        
-        if ( rightMotorPower == 0 )
-        {
-            digitalWrite( BOT_PIN_MOTOR2_ENABLE, LOW );
-            digitalWrite( BOT_PIN_MOTOR2_INPUT1, LOW );
-            digitalWrite( BOT_PIN_MOTOR2_INPUT2, LOW );
-        }
-        else
-        {
-            if ( rightMotorPower > 0 )
-            {
-                digitalWrite( BOT_PIN_MOTOR2_INPUT1, HIGH );
-                digitalWrite( BOT_PIN_MOTOR2_INPUT2, LOW );
-            }
-            else
-            {
-                digitalWrite( BOT_PIN_MOTOR2_INPUT1, LOW );
-                digitalWrite( BOT_PIN_MOTOR2_INPUT2, HIGH );
-            }
-            digitalWrite( BOT_PIN_MOTOR2_ENABLE, HIGH );
-        }
+        SetMotorPower( power, BOT_PIN_MOTOR_RIGHT_ENABLE, BOT_PIN_MOTOR_RIGHT_INPUT1, BOT_PIN_MOTOR_RIGHT_INPUT2 );
     }    
 }
 

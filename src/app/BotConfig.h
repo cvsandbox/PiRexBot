@@ -29,14 +29,20 @@
 // Pin number for the LED, which is switched on while there is an active connection to the bot
 #define BOT_PIN_CONNECTION_ACTIVE_LED (11)
 
-// ===== Motors' configuration =====
+// ===== Motors' configuration (L293D chip in use) =====
 
-#define BOT_PIN_MOTOR1_ENABLE (12)
-#define BOT_PIN_MOTOR1_INPUT1 (18)
-#define BOT_PIN_MOTOR1_INPUT2 (16)
+// Left motor
+#define BOT_PIN_MOTOR_LEFT_ENABLE (12)
+#define BOT_PIN_MOTOR_LEFT_INPUT1 (18)
+#define BOT_PIN_MOTOR_LEFT_INPUT2 (16)
 
-#define BOT_PIN_MOTOR2_ENABLE (33)
-#define BOT_PIN_MOTOR2_INPUT1 (31)
-#define BOT_PIN_MOTOR2_INPUT2 (29)
+// Right motor
+#define BOT_PIN_MOTOR_RIGHT_ENABLE (33)
+#define BOT_PIN_MOTOR_RIGHT_INPUT1 (31)
+#define BOT_PIN_MOTOR_RIGHT_INPUT2 (29)
+
+// If software PWM is enabled for motors, then their speed can be controlled.
+// If not enabled, then only state (i.e. rotate or not) and direction.
+// #define BOT_MOTORS_ENABLE_SOFT_PWM
 
 #endif // PIREXBOT_CONFIG_H
