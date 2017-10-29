@@ -33,7 +33,7 @@ using namespace std;
 const static string  PROP_LEFT_POWER  = "leftPower";
 const static string  PROP_RIGHT_POWER = "rightPower";
 
-list<string> SupportedProperties = { PROP_LEFT_POWER, PROP_RIGHT_POWER };
+const static list<string> SupportedProperties = { PROP_LEFT_POWER, PROP_RIGHT_POWER };
 
 MotorsController::MotorsController( ) :
     leftMotorPower( 0 ), rightMotorPower( 0 )
@@ -142,7 +142,7 @@ void MotorsController::MotorsController::Stop( )
 }
 
 // Set property of the object
-XError MotorsController::SetProperty( const std::string& propertyName, const std::string& value )
+XError MotorsController::SetProperty( const string& propertyName, const string& value )
 {
     XError ret = XError::Success;
     int    numericValue;
@@ -171,7 +171,7 @@ XError MotorsController::SetProperty( const std::string& propertyName, const std
 }
 
 // Get property of the object
-XError MotorsController::GetProperty( const std::string& propertyName, std::string& value ) const
+XError MotorsController::GetProperty( const string& propertyName, string& value ) const
 {
     XError ret = XError::Success;
     int    numericValue;

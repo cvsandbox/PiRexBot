@@ -39,10 +39,8 @@ public:
     void Stop( );
 
     // IObjectConfigurator implementation
-    
     XError SetProperty( const std::string& propertyName, const std::string& value );
     XError GetProperty( const std::string& propertyName, std::string& value ) const;
-
     std::map<std::string, std::string> GetAllProperties( ) const;
     
 private:

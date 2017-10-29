@@ -25,7 +25,8 @@ VPATH = ../../externals/mongoose/ \
 # C code
 SRC_C = mongoose.c 
 # C++ code
-SRC_CPP = pirexbot.cpp MotorsController.cpp XImage.cpp XJpegEncoder.cpp XManualResetEvent.cpp \
+SRC_CPP = pirexbot.cpp MotorsController.cpp DistanceController.cpp \
+    XImage.cpp XJpegEncoder.cpp XManualResetEvent.cpp \
     XRaspiCamera.cpp XRaspiCameraConfig.cpp XVideoSourceToWeb.cpp XWebServer.cpp \
     XSimpleJsonParser.cpp XObjectConfigurationSerializer.cpp \
     XObjectConfigurationRequestHandler.cpp XStringTools.cpp \

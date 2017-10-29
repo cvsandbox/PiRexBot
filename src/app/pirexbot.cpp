@@ -39,6 +39,10 @@
 #include "BotConfig.h"
 #include "MotorsController.hpp"
 
+#ifdef BOT_DISTANCE_ENABLE_MEASUREMENTS
+    #include "DistanceController.hpp"
+#endif
+
 // Release build embeds web resources into executable
 #ifdef NDEBUG
     #include "index.html.h"
@@ -470,6 +474,13 @@ int main( int argc, char* argv[] )
            AddHandler( video2web.CreateJpegHandler( "/camera/jpeg" ), viewersGroup ).
            AddHandler( video2web.CreateMjpegHandler( "/camera/mjpeg", Settings.FrameRate ), viewersGroup );
 
+#ifdef BOT_DISTANCE_ENABLE_MEASUREMENTS
+    // create distance controller
+    shared_ptr<DistanceController> distanceController = make_shared<DistanceController>( );
+
+    server.AddHandler( make_shared<XObjectInformationRequestHandler>( "/distance", distanceController ), viewersGroup );
+#endif
+
     // use custom or embedded web content
     if ( !Settings.CustomWebContent.empty( ) )
     {
@@ -518,6 +529,10 @@ int main( int argc, char* argv[] )
 
         xcamera->Start( );
 
+        #ifdef BOT_DISTANCE_ENABLE_MEASUREMENTS
+            distanceController->StartMeasurements( );
+        #endif
+
         while ( !ExitEvent.Wait( 1000 ) )
         {
             if ( ++saveCounter == 60 )
@@ -542,6 +557,10 @@ int main( int argc, char* argv[] )
             digitalWrite( BOT_PIN_CONNECTION_ACTIVE_LED, ( timeSinceLastAccess < 2000 ) ? HIGH : LOW );
         #endif
         }
+
+        #ifdef BOT_DISTANCE_ENABLE_MEASUREMENTS
+            distanceController->StopMeasurements( );
+        #endif
 
         serializer.SaveConfiguration( );
         xcamera->SignalToStop( );

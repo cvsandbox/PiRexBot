@@ -23,7 +23,7 @@
 
 // ===== LEDs 'configuration =====
 
-// Pin number for the LED, which is switched on while the PiRexBot application runs
+// Pin number for the LED, which is switched on while the PiRex Bot application is running
 #define BOT_PIN_ON_LED (7)
 
 // Pin number for the LED, which is switched on while there is an active connection to the bot
@@ -44,5 +44,13 @@
 // If software PWM is enabled for motors, then their speed can be controlled.
 // If not enabled, then only state (i.e. rotate or not) and direction.
 // #define BOT_MOTORS_ENABLE_SOFT_PWM
+
+// ===== Distance measurements ( HC-SR04 sensor in use) =====
+
+// Tells if the bot is equipped with ultrasonic sensor for distance measurements
+#define BOT_DISTANCE_ENABLE_MEASUREMENTS
+
+#define BOT_PIN_ULTRASONIC_TRIGGER (22)
+#define BOT_PIN_ULTRASONIC_ECHO    (37)
 
 #endif // PIREXBOT_CONFIG_H
