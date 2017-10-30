@@ -52,6 +52,7 @@
     #include "camera.js.h"
     #include "cameraproperties.html.h"
     #include "botcontrols.html.h"
+    #include "distance.html.h"
     #include "cameraproperties.js.h"
     #include "jquery.js.h"
     #include "jquery.mobile.js.h"
@@ -438,6 +439,12 @@ int main( int argc, char* argv[] )
     botInfo.insert( PropertyMap::value_type( "device", BOT_NAME ) );
     botInfo.insert( PropertyMap::value_type( "title",  Settings.BotTitle ) );
 
+#ifdef BOT_DISTANCE_ENABLE_MEASUREMENTS
+    botInfo.insert( PropertyMap::value_type( "providesDistance",  "true" ) );
+#else
+    botInfo.insert( PropertyMap::value_type( "providesDistance",  "false" ) );
+#endif
+
     // create and configure web server
     XWebServer          server( "", Settings.WebPort );
     XVideoSourceToWeb   video2web;
@@ -499,6 +506,7 @@ int main( int argc, char* argv[] )
                AddHandler( make_shared<XEmbeddedContentHandler>( "cameraproperties.js", &web_cameraproperties_js ), viewersGroup ).
                AddHandler( make_shared<XEmbeddedContentHandler>( "cameraproperties.html", &web_cameraproperties_html ), configGroup ).
                AddHandler( make_shared<XEmbeddedContentHandler>( "botcontrols.html", &web_botcontrols_html ), configGroup ).
+               AddHandler( make_shared<XEmbeddedContentHandler>( "distance.html", &web_distance_html ), configGroup ).
                AddHandler( make_shared<XEmbeddedContentHandler>( "jquery.js", &web_jquery_js ), viewersGroup ).
                AddHandler( make_shared<XEmbeddedContentHandler>( "jquery.mobile.js", &web_jquery_mobile_js ), viewersGroup ).
                AddHandler( make_shared<XEmbeddedContentHandler>( "jquery.mobile.css", &web_jquery_mobile_css ), viewersGroup ).

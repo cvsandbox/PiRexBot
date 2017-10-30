@@ -45,7 +45,7 @@
 // If not enabled, then only state (i.e. rotate or not) and direction.
 // #define BOT_MOTORS_ENABLE_SOFT_PWM
 
-// ===== Distance measurements ( HC-SR04 sensor in use) =====
+// ===== Distance measurements (HC-SR04 sensor in use) =====
 
 // Tells if the bot is equipped with ultrasonic sensor for distance measurements
 #define BOT_DISTANCE_ENABLE_MEASUREMENTS

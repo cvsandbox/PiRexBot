@@ -125,6 +125,7 @@ generateweb:
 	$(WEB2H) -i $(OUT_INC)pirex_white.png -o $(OUT_INC)pirex_white.png.h
 	$(WEB2H) -i $(OUT_INC)cameraproperties.html -o $(OUT_INC)cameraproperties.html.h
 	$(WEB2H) -i $(OUT_INC)botcontrols.html -o $(OUT_INC)botcontrols.html.h
+	$(WEB2H) -i $(OUT_INC)distance.html -o $(OUT_INC)distance.html.h
 	$(WEB2H) -i $(OUT_INC)camera.js -o $(OUT_INC)camera.js.h
 	$(WEB2H) -i $(OUT_INC)cameraproperties.js -o $(OUT_INC)cameraproperties.js.h
 	$(WEB2H) -i $(OUT_INC)jquery.js -o $(OUT_INC)jquery.js.h

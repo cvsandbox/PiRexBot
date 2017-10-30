@@ -34,6 +34,12 @@
 <div id="botcontrols" style="display: none;">
 </div>
 
+<br>
+
+<div id="distancecontrols" style="display: none;">
+
+</div>
+
 </div>
 
 <div data-role="footer" data-theme="b">
@@ -43,6 +49,7 @@
 </div>
 
 <script>
+var botProvidesObstacleDistance = false;
 
 function getBotInfo( )
 {
@@ -69,6 +76,8 @@ function getBotInfo( )
 
                 $('#title').html( title );
                 document.title = 'PiRex Bot :: ' + title;
+
+                botProvidesObstacleDistance = ( config.providesDistance == "true" );
             }
         },
         failure: function( errMsg )
@@ -144,10 +153,24 @@ function showSettings( )
                 showingControls = true;
             }
         });
+
+        if ( botProvidesObstacleDistance )
+        {
+            $.ajax({
+                url: '/distance.html?=' + timeNow,
+
+                success: function(data)
+                {
+                    $( "#distancecontrols" ).html( data ).trigger( 'create' );
+                    $( "#distancecontrols" ).show( );
+                }
+            });
+        }
     }
     else
     {
         $( "#botcontrols" ).hide( );
+        $( "#distancecontrols" ).hide( );
         $( "#controlButton" ).removeClass( 'ui-btn-active' );
         showingControls = false;
     }

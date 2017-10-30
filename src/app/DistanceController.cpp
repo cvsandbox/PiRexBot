@@ -21,9 +21,10 @@
 #include "DistanceController.hpp"
 #include "BotConfig.h"
 
-#include <stdio.h>
 #include <stdint.h>
+#include <vector>
 #include <list>
+#include <algorithm>
 #include <mutex>
 #include <thread>
 #include <wiringPi.h>
@@ -34,6 +35,9 @@ using namespace std;
 
 // Time (microseconds) to wait for distance measurement
 #define MEASUREMENT_TIMEOUT_US  (15000)
+
+// History length to calculate median distance
+#define MEASUREMENT_HISTOTY_LENGTH (5)
 
 const static string  PROP_LAST_DISTANCE    = "lastDistance";
 const static string  PROP_MEDIAN_DISTANCE  = "meadianDistance";
@@ -49,6 +53,9 @@ namespace Private
         float                   LastDistance;
         float                   MedianDistance;
 
+        vector<float>           MeasurementHistory;
+        int                     NextHistoryIndex;
+
         recursive_mutex         Sync;
         thread                  ControlThread;
         XManualResetEvent       NeedToStop;
@@ -56,7 +63,7 @@ namespace Private
 
     public:
         DistanceControllerData( ) :
-            LastDistance( 0 ), MedianDistance( 0 ),
+            LastDistance( 0 ), MedianDistance( 0 ), MeasurementHistory( ), NextHistoryIndex( 0 ),
             Sync( ), ControlThread( ), NeedToStop( ), Running( false )
         {
         }
@@ -64,6 +71,7 @@ namespace Private
         bool StartMeasurements( );
         void StopMeasurements( );
         bool IsRunning( );
+        void RunMeasurementLoop( );
 
         static void ControlThreadHanlder( DistanceControllerData* me );
     };
@@ -167,8 +175,10 @@ bool DistanceControllerData::StartMeasurements( )
         NeedToStop.Reset( );
         Running = true;
 
-        LastDistance   = 0.0f;
-        MedianDistance = 0.0f;
+        LastDistance     = 0.0f;
+        MedianDistance   = 0.0f;
+        NextHistoryIndex = 0;
+        MeasurementHistory.clear( );
 
         ControlThread = thread( ControlThreadHanlder, this );
     }
@@ -202,16 +212,13 @@ bool DistanceControllerData::IsRunning( )
     return Running;
 }
 
-// Measurements thread handler
-void DistanceControllerData::ControlThreadHanlder( DistanceControllerData* me )
+// Run the actual measurement loop and checking if it is time to stop
+void DistanceControllerData::RunMeasurementLoop( )
 {
     uint32_t reftime, start, stop;
     bool     failed;
 
-    pinMode( BOT_PIN_ULTRASONIC_TRIGGER, OUTPUT );
-    pinMode( BOT_PIN_ULTRASONIC_ECHO, INPUT );
-
-    while ( !me->NeedToStop.Wait( 10 ) )
+    while ( !NeedToStop.Wait( 10 ) )
     {
         failed = false;
 
@@ -253,11 +260,35 @@ void DistanceControllerData::ControlThreadHanlder( DistanceControllerData* me )
 
         if ( !failed )
         {
-            me->LastDistance = (float) ( stop - start ) / 58.2f;
+            LastDistance = (float) ( stop - start ) / 58.2f;
 
-            printf( "%0.2f\n", me->LastDistance );
+            if ( MeasurementHistory.size( ) < MEASUREMENT_HISTOTY_LENGTH )
+            {
+                MeasurementHistory.push_back( LastDistance );
+            }
+            else
+            {
+                MeasurementHistory[NextHistoryIndex] = LastDistance;
+
+                NextHistoryIndex = ( NextHistoryIndex + 1 ) % MEASUREMENT_HISTOTY_LENGTH;
+            }
+
+            // sort the measurements history
+            vector<float> sortedHisotry = MeasurementHistory;
+            std::sort( sortedHisotry.begin(  ), sortedHisotry.end( ) );
+
+            MedianDistance = sortedHisotry[sortedHisotry.size( ) / 2 ];
         }
     }
+}
+
+// Measurements thread handler
+void DistanceControllerData::ControlThreadHanlder( DistanceControllerData* me )
+{
+    pinMode( BOT_PIN_ULTRASONIC_TRIGGER, OUTPUT );
+    pinMode( BOT_PIN_ULTRASONIC_ECHO, INPUT );
+
+    me->RunMeasurementLoop( );
 
     pinMode( BOT_PIN_ULTRASONIC_ECHO, OUTPUT );
 

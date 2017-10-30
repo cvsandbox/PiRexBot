@@ -1,0 +1,43 @@
+<div id="distance_pane">
+    Obstacle distance: <span id="distanceValue"></span>
+</div>
+
+<script>
+// Get distance to an obstacle
+function getObstacleDistance( )
+{
+    $.ajax( {
+        type        : "GET",
+        url         : "/distance",
+        contentType : "application/json; charset=utf-8",
+        async       : true,
+        success: function( data )
+        {
+            if ( data.status != "OK" )
+            {
+                console.log( "Failed getting camera properties" );
+            }
+            else
+            {
+                $('#distanceValue').html( data.config.meadianDistance + " cm" );
+            }
+        },
+        failure: function( errMsg )
+        {
+            console.log( errMsg );
+        }
+    } );
+}
+
+function updateDistance( )
+{
+    getObstacleDistance( );
+
+    if ( $('#distanceValue').is( ":visible" ) )
+    {
+        setTimeout( updateDistance, 50 );
+    }
+}
+
+setTimeout( updateDistance, 100 );
+</script>

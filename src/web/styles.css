@@ -68,7 +68,16 @@
     color: #FFFFFF;
 }
 
-#motor_control {
+#motor_control_pane {
+    margin-left: 680px;
+    width: 312px;
+    background-color: #D0D0E8;
+    padding: 20px;
+    border: 2px solid #0040A0;
+    border-radius: 10px;
+}
+
+#distance_pane {
     margin-left: 680px;
     width: 312px;
     background-color: #D0D0E8;
