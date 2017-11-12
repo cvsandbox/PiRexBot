@@ -21,25 +21,29 @@
 
 <div data-role="header" data-theme="b">
     <img width="32" height="32" src="pirex_white.png" style="float:left;display:inline;margin-left:10px;margin-top:5px"/>
-    <h1 id="title">Remote Camera</h1>
-    <a href="index.html" id="controlButton" data-icon="gear" class="ui-btn-right">Control</a>
+    <h1 id="title">PiRex Bot</h1>
+    <div class="ui-btn-right" data-role="controlgroup" data-type="horizontal">
+        <a href="#" id="controlButton" data-role="button" data-icon="gear">Control</a>
+        <a href="#" id="cameraButton" data-role="button" data-icon="eye">Camera</a>
+    </div>
 </div>
 
 <div data-role="content">
+    <div id="cameracontainer">
+        <img id="camera" width="640" height="480">
+    </div>
 
-<div id="cameracontainer">
-    <img id="camera" width="640" height="480">
-</div>
+    <div id="cameraproperties" style="display: none;">
+    </div>
 
-<div id="botcontrols" style="display: none;">
-</div>
+    <div id="botcontrols" style="display: none;">
+    </div>
 
-<br>
+    <br>
 
-<div id="distancecontrols" style="display: none;">
+    <div id="distancecontrols" style="display: none;">
 
-</div>
-
+    </div>
 </div>
 
 <div data-role="footer" data-theme="b">
@@ -106,6 +110,8 @@ function getCameraInfo( )
 
                 $('#cameracontainer').width( cameraWidth + 20 );
                 $('#cameraproperties').css( { 'margin-left' : cameraWidth + 40 } );
+                $('#botcontrols').css( { 'margin-left' : cameraWidth + 40 } );
+                $('#distancecontrols').css( { 'margin-left' : cameraWidth + 40 } );
             }
         },
         failure: function( errMsg )
@@ -132,12 +138,18 @@ function getVersionInfo( )
     } );
 }
 
-var showingControls = false;
+var showingBotControls = false;
+var showingCameraControls = false;
 
-// Load camera settings controls
-function showSettings( )
+// Show/hide controls to move the bot
+function toggleBotControls( )
 {
-    if ( !showingControls )
+    if ( showingCameraControls )
+    {
+        toggleCameraControls( );
+    }
+
+    if ( !showingBotControls )
     {
         var timeNow = new Date( ).getTime( );
 
@@ -150,7 +162,7 @@ function showSettings( )
                 $( "#botcontrols" ).show( );
 
                 $( "#controlButton" ).addClass( 'ui-btn-active' );
-                showingControls = true;
+                showingBotControls = true;
             }
         });
 
@@ -172,7 +184,7 @@ function showSettings( )
         $( "#botcontrols" ).hide( );
         $( "#distancecontrols" ).hide( );
         $( "#controlButton" ).removeClass( 'ui-btn-active' );
-        showingControls = false;
+        showingBotControls = false;
     }
 
     $( "#controlButton" ).blur( );
@@ -180,7 +192,45 @@ function showSettings( )
     return false;
 }
 
-document.getElementById( 'controlButton' ).onclick = showSettings;
+// Show/hide camera settings controls
+function toggleCameraControls( )
+{
+    if ( showingBotControls )
+    {
+        toggleBotControls( );
+    }
+
+    if ( !showingCameraControls )
+    {
+        var timeNow = new Date( ).getTime( );
+
+        $.ajax({
+            url: '/cameraproperties.html?=' + timeNow,
+
+            success: function(data)
+            {
+                $( "#cameraproperties" ).html( data ).trigger( 'create' );
+                $( "#cameraproperties" ).show( );
+
+                $( "#cameraButton" ).addClass( 'ui-btn-active' );
+                showingCameraControls = true;
+            }
+        });
+    }
+    else
+    {
+        $( "#cameraproperties" ).hide( );
+        $( "#cameraButton" ).removeClass( 'ui-btn-active' );
+        showingCameraControls = false;
+    }
+
+    $( "#cameraButton" ).blur( );
+
+    return false;
+}
+
+document.getElementById( 'controlButton' ).onclick = toggleBotControls;
+document.getElementById( 'cameraButton' ).onclick = toggleCameraControls;
 
 // get bot and camera information like name, width, height
 getBotInfo( );
