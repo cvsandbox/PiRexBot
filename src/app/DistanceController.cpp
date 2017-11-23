@@ -40,7 +40,7 @@ using namespace std;
 #define MEASUREMENT_HISTOTY_LENGTH (5)
 
 const static string  PROP_LAST_DISTANCE    = "lastDistance";
-const static string  PROP_MEDIAN_DISTANCE  = "meadianDistance";
+const static string  PROP_MEDIAN_DISTANCE  = "medianDistance";
 
 const static list<string> SupportedProperties = { PROP_LAST_DISTANCE, PROP_MEDIAN_DISTANCE };
 
