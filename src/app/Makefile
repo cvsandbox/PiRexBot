@@ -1,7 +1,7 @@
 #
 #   PiRexBot - remote controlled bot based on RaspberryPi
 #
-#   Copyright (C) 2017, cvsandbox, cvsandbox@gmail.com
+#   Copyright (C) 2018, cvsandbox, cvsandbox@gmail.com
 #
 #   This program is free software; you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License as published by
