@@ -31,6 +31,10 @@
 
 // ===== Motors' configuration (L293D chip in use) =====
 
+// With the L293D, input1 and input2 control direction of motors' rotation. If input1 is set to HIGH,
+// while input2 is set to LOW, a motor rotates "forward" (depends on how it is attached to the robot).
+// And if input1 is LOW, while input2 is HIGH, a motor rotates opposite direction.
+
 // Left motor
 #define BOT_PIN_MOTOR_LEFT_ENABLE (12)
 #define BOT_PIN_MOTOR_LEFT_INPUT1 (18)
