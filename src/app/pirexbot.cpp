@@ -445,6 +445,12 @@ int main( int argc, char* argv[] )
     botInfo.insert( PropertyMap::value_type( "providesDistance",  "false" ) );
 #endif
 
+#ifdef BOT_MOTORS_ENABLE_SOFT_PWM
+    botInfo.insert( PropertyMap::value_type( "providesSpeedControl",  "true" ) );
+#else
+    botInfo.insert( PropertyMap::value_type( "providesSpeedControl",  "false" ) );
+#endif
+
     // create and configure web server
     XWebServer          server( "", Settings.WebPort );
     XVideoSourceToWeb   video2web;
