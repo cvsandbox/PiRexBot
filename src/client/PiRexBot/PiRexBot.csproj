@@ -50,7 +50,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AForge.NET\Controls\VideoSourcePlayer.cs" />
+    <Compile Include="AForge.NET\Controls\VideoSourcePlayer.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="AForge.NET\Controls\VideoSourcePlayer.Designer.cs">
       <DependentUpon>VideoSourcePlayer.cs</DependentUpon>
     </Compile>
@@ -62,6 +64,7 @@
     <Compile Include="AForge.NET\Video\JPEGStream.cs" />
     <Compile Include="AForge.NET\Video\MJPEGStream.cs" />
     <Compile Include="AForge.NET\Video\VideoEvents.cs" />
+    <Compile Include="HttpCommandsThread.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
