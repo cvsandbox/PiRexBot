@@ -93,7 +93,7 @@ namespace PiRexBot
         private object sync = new object( );
 
         // timeout value for web request
-        private const int requestTimeout = 10000;
+        private const int requestTimeout = 5000;
         // buffer size used to read HTTP responses
         private const int bufferSize     = 1024 * 10;
         // size of portion to read at once
@@ -256,6 +256,11 @@ namespace PiRexBot
             {
                 command.Id = ++commandCounter;
 
+                if ( commandCounter == uint.MaxValue )
+                {
+                    commandCounter = 0;
+                }
+
                 if ( clearPreviousRequests )
                 {
                     ClearRequests( command.Url );
@@ -312,6 +317,11 @@ namespace PiRexBot
             {
                 request = (HttpWebRequest) WebRequest.Create( baseAddress + commandToProcess.Url );
                 request.Timeout = requestTimeout;
+
+                if ( ( !string.IsNullOrEmpty( login ) ) && ( password != null ) )
+                {
+                    request.Credentials = new NetworkCredential( login, password );
+                }
 
                 // send POST data
                 if ( commandToProcess.Type == HttpRequestType.Post )

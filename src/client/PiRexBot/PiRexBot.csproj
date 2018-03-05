@@ -87,6 +87,7 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -102,7 +103,14 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Images\backward.png" />
+    <Content Include="Images\forward.png" />
+    <Content Include="Images\rotate_left.png" />
+    <Content Include="Images\rotate_right.png" />
+    <Content Include="Images\slight_left.png" />
+    <Content Include="Images\slight_right.png" />
     <Content Include="pirex.ico" />
+    <None Include="Resources\moveLeft.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
