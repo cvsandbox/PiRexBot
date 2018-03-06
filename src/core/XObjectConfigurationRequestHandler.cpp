@@ -175,7 +175,7 @@ void HandlePostRequest( const shared_ptr<IObjectConfigurator>& objectToConfig, c
                      "%s", (int) reply.length( ), reply.c_str( ) );
 }
 
-// ------------- Implmenetation of XObjectConfigurationRequestHandler -------------
+// ------------- Implementation of XObjectConfigurationRequestHandler -------------
 
 XObjectConfigurationRequestHandler::XObjectConfigurationRequestHandler( const string& uri,
                                                                         const shared_ptr<IObjectConfigurator>& objectToConfig ) :
@@ -208,7 +208,7 @@ void XObjectConfigurationRequestHandler::HandleHttpRequest( const IWebRequest& r
     }
 }
 
-// ------------- Implmenetation of XObjectConfigurationRequestHandler -------------
+// ------------- Implementation of XObjectConfigurationRequestHandler -------------
 
 XObjectInformationRequestHandler::XObjectInformationRequestHandler( const string& uri,
                                                                     const shared_ptr<IObjectInformation>& infoObject ) :
@@ -217,7 +217,7 @@ XObjectInformationRequestHandler::XObjectInformationRequestHandler( const string
 {
 }
 
-// Handle object configuration request by providing its current configuration or setting specified varaibles/properties
+// Handle object configuration request by providing its current configuration or setting specified variables/properties
 void XObjectInformationRequestHandler::HandleHttpRequest( const IWebRequest& request, IWebResponse& response )
 {
     string method = request.Method( );

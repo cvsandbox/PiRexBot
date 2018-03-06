@@ -307,7 +307,7 @@ namespace Private
 }
 
 /* ================================================================= */
-/* Implemenetation of the IWebRequestHandler                         */
+/* Implementation of the IWebRequestHandler                         */
 /* ================================================================= */
 
 IWebRequestHandler::IWebRequestHandler( const string& uri, bool canHandleSubContent ) :
@@ -327,7 +327,7 @@ IWebRequestHandler::IWebRequestHandler( const string& uri, bool canHandleSubCont
 }
 
 /* ================================================================= */
-/* Implemenetation of the XEmbeddedContentHandler                    */
+/* Implementation of the XEmbeddedContentHandler                    */
 /* ================================================================= */
 
 XEmbeddedContentHandler::XEmbeddedContentHandler( const string& uri, const XEmbeddedContent* content ) :
@@ -346,7 +346,7 @@ void XEmbeddedContentHandler::HandleHttpRequest( const IWebRequest& /* request *
 }
 
 /* ================================================================= */
-/* Implemenetation of the XWebServer                                 */
+/* Implementation of the XWebServer                                 */
 /* ================================================================= */
 
 XWebServer::XWebServer( const string& documentRoot, uint16_t port ) :
