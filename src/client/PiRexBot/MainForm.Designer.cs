@@ -35,6 +35,12 @@
             this.exitMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.videoModeCombo = new System.Windows.Forms.ComboBox();
+            this.label4 = new System.Windows.Forms.Label();
+            this.passwordBox = new System.Windows.Forms.TextBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.loginBox = new System.Windows.Forms.TextBox();
+            this.label2 = new System.Windows.Forms.Label();
             this.connectButton = new System.Windows.Forms.Button();
             this.portUpDown = new System.Windows.Forms.NumericUpDown();
             this.label1 = new System.Windows.Forms.Label();
@@ -49,12 +55,7 @@
             this.moveForwardButton = new System.Windows.Forms.Button();
             this.moveLeftButton = new System.Windows.Forms.Button();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.label2 = new System.Windows.Forms.Label();
-            this.loginBox = new System.Windows.Forms.TextBox();
-            this.label3 = new System.Windows.Forms.Label();
-            this.passwordBox = new System.Windows.Forms.TextBox();
-            this.label4 = new System.Windows.Forms.Label();
-            this.videoModeCombo = new System.Windows.Forms.ComboBox();
+            this.updateMotorsStateTimer = new System.Windows.Forms.Timer(this.components);
             this.videoSourcePlayer = new AForge.Controls.VideoSourcePlayer();
             this.menuStrip.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -117,6 +118,60 @@
             this.groupBox1.TabIndex = 1;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Connection";
+            // 
+            // videoModeCombo
+            // 
+            this.videoModeCombo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.videoModeCombo.FormattingEnabled = true;
+            this.videoModeCombo.Items.AddRange(new object[] {
+            "MJPEG",
+            "JPEG"});
+            this.videoModeCombo.Location = new System.Drawing.Point(557, 25);
+            this.videoModeCombo.Name = "videoModeCombo";
+            this.videoModeCombo.Size = new System.Drawing.Size(100, 24);
+            this.videoModeCombo.TabIndex = 5;
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(505, 28);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(48, 17);
+            this.label4.TabIndex = 4;
+            this.label4.Text = "Video:";
+            // 
+            // passwordBox
+            // 
+            this.passwordBox.Location = new System.Drawing.Point(330, 55);
+            this.passwordBox.Name = "passwordBox";
+            this.passwordBox.Size = new System.Drawing.Size(150, 22);
+            this.passwordBox.TabIndex = 9;
+            this.passwordBox.UseSystemPasswordChar = true;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(255, 58);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(73, 17);
+            this.label3.TabIndex = 8;
+            this.label3.Text = "Password:";
+            // 
+            // loginBox
+            // 
+            this.loginBox.Location = new System.Drawing.Point(95, 55);
+            this.loginBox.Name = "loginBox";
+            this.loginBox.Size = new System.Drawing.Size(150, 22);
+            this.loginBox.TabIndex = 7;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(12, 58);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(47, 17);
+            this.label2.TabIndex = 6;
+            this.label2.Text = "Login:";
             // 
             // connectButton
             // 
@@ -210,6 +265,9 @@
             this.rotateRightButton.TabStop = false;
             this.toolTip.SetToolTip(this.rotateRightButton, "Rotate right");
             this.rotateRightButton.UseVisualStyleBackColor = true;
+            this.rotateRightButton.MouseDown += new System.Windows.Forms.MouseEventHandler(this.rotateRightButton_MouseDown);
+            this.rotateRightButton.MouseLeave += new System.EventHandler(this.controlButton_MouseLeave);
+            this.rotateRightButton.MouseUp += new System.Windows.Forms.MouseEventHandler(this.controlButton_MouseUp);
             // 
             // moveBackwardButton
             // 
@@ -221,6 +279,9 @@
             this.moveBackwardButton.TabStop = false;
             this.toolTip.SetToolTip(this.moveBackwardButton, "Move backward");
             this.moveBackwardButton.UseVisualStyleBackColor = true;
+            this.moveBackwardButton.MouseDown += new System.Windows.Forms.MouseEventHandler(this.moveBackwardButton_MouseDown);
+            this.moveBackwardButton.MouseLeave += new System.EventHandler(this.controlButton_MouseLeave);
+            this.moveBackwardButton.MouseUp += new System.Windows.Forms.MouseEventHandler(this.controlButton_MouseUp);
             // 
             // rotateLeftButton
             // 
@@ -232,6 +293,9 @@
             this.rotateLeftButton.TabStop = false;
             this.toolTip.SetToolTip(this.rotateLeftButton, "Rotate left");
             this.rotateLeftButton.UseVisualStyleBackColor = true;
+            this.rotateLeftButton.MouseDown += new System.Windows.Forms.MouseEventHandler(this.rotateLeftButton_MouseDown);
+            this.rotateLeftButton.MouseLeave += new System.EventHandler(this.controlButton_MouseLeave);
+            this.rotateLeftButton.MouseUp += new System.Windows.Forms.MouseEventHandler(this.controlButton_MouseUp);
             // 
             // moveRightButton
             // 
@@ -243,6 +307,9 @@
             this.moveRightButton.TabStop = false;
             this.toolTip.SetToolTip(this.moveRightButton, "Move right");
             this.moveRightButton.UseVisualStyleBackColor = true;
+            this.moveRightButton.MouseDown += new System.Windows.Forms.MouseEventHandler(this.moveRightButton_MouseDown);
+            this.moveRightButton.MouseLeave += new System.EventHandler(this.controlButton_MouseLeave);
+            this.moveRightButton.MouseUp += new System.Windows.Forms.MouseEventHandler(this.controlButton_MouseUp);
             // 
             // moveForwardButton
             // 
@@ -254,6 +321,9 @@
             this.moveForwardButton.TabStop = false;
             this.toolTip.SetToolTip(this.moveForwardButton, "Move forward");
             this.moveForwardButton.UseVisualStyleBackColor = true;
+            this.moveForwardButton.MouseDown += new System.Windows.Forms.MouseEventHandler(this.moveForwardButton_MouseDown);
+            this.moveForwardButton.MouseLeave += new System.EventHandler(this.controlButton_MouseLeave);
+            this.moveForwardButton.MouseUp += new System.Windows.Forms.MouseEventHandler(this.controlButton_MouseUp);
             // 
             // moveLeftButton
             // 
@@ -265,60 +335,14 @@
             this.moveLeftButton.TabStop = false;
             this.toolTip.SetToolTip(this.moveLeftButton, "Move left");
             this.moveLeftButton.UseVisualStyleBackColor = true;
+            this.moveLeftButton.MouseDown += new System.Windows.Forms.MouseEventHandler(this.moveLeftButton_MouseDown);
+            this.moveLeftButton.MouseLeave += new System.EventHandler(this.controlButton_MouseLeave);
+            this.moveLeftButton.MouseUp += new System.Windows.Forms.MouseEventHandler(this.controlButton_MouseUp);
             // 
-            // label2
+            // updateMotorsStateTimer
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(12, 58);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(47, 17);
-            this.label2.TabIndex = 6;
-            this.label2.Text = "Login:";
-            // 
-            // loginBox
-            // 
-            this.loginBox.Location = new System.Drawing.Point(95, 55);
-            this.loginBox.Name = "loginBox";
-            this.loginBox.Size = new System.Drawing.Size(150, 22);
-            this.loginBox.TabIndex = 7;
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(255, 58);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(73, 17);
-            this.label3.TabIndex = 8;
-            this.label3.Text = "Password:";
-            // 
-            // passwordBox
-            // 
-            this.passwordBox.Location = new System.Drawing.Point(330, 55);
-            this.passwordBox.Name = "passwordBox";
-            this.passwordBox.Size = new System.Drawing.Size(150, 22);
-            this.passwordBox.TabIndex = 9;
-            this.passwordBox.UseSystemPasswordChar = true;
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(505, 28);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(48, 17);
-            this.label4.TabIndex = 4;
-            this.label4.Text = "Video:";
-            // 
-            // videoModeCombo
-            // 
-            this.videoModeCombo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.videoModeCombo.FormattingEnabled = true;
-            this.videoModeCombo.Items.AddRange(new object[] {
-            "MJPEG",
-            "JPEG"});
-            this.videoModeCombo.Location = new System.Drawing.Point(557, 25);
-            this.videoModeCombo.Name = "videoModeCombo";
-            this.videoModeCombo.Size = new System.Drawing.Size(100, 24);
-            this.videoModeCombo.TabIndex = 5;
+            this.updateMotorsStateTimer.Interval = 250;
+            this.updateMotorsStateTimer.Tick += new System.EventHandler(this.updateMotorsStateTimer_Tick);
             // 
             // videoSourcePlayer
             // 
@@ -387,6 +411,7 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.ComboBox videoModeCombo;
         private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Timer updateMotorsStateTimer;
     }
 }
 
