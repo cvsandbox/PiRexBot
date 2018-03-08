@@ -56,12 +56,15 @@
             this.moveLeftButton = new System.Windows.Forms.Button();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.updateMotorsStateTimer = new System.Windows.Forms.Timer(this.components);
+            this.distanceMeasurementGroup = new System.Windows.Forms.GroupBox();
+            this.distanceLabel = new System.Windows.Forms.Label();
             this.videoSourcePlayer = new AForge.Controls.VideoSourcePlayer();
             this.menuStrip.SuspendLayout();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.portUpDown)).BeginInit();
             this.groupBox2.SuspendLayout();
             this.botControlGroup.SuspendLayout();
+            this.distanceMeasurementGroup.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip
@@ -344,6 +347,28 @@
             this.updateMotorsStateTimer.Interval = 250;
             this.updateMotorsStateTimer.Tick += new System.EventHandler(this.updateMotorsStateTimer_Tick);
             // 
+            // distanceMeasurementGroup
+            // 
+            this.distanceMeasurementGroup.Controls.Add(this.distanceLabel);
+            this.distanceMeasurementGroup.Location = new System.Drawing.Point(692, 390);
+            this.distanceMeasurementGroup.Name = "distanceMeasurementGroup";
+            this.distanceMeasurementGroup.Size = new System.Drawing.Size(350, 100);
+            this.distanceMeasurementGroup.TabIndex = 4;
+            this.distanceMeasurementGroup.TabStop = false;
+            this.distanceMeasurementGroup.Text = "Distance measurement";
+            // 
+            // distanceLabel
+            // 
+            this.distanceLabel.BackColor = System.Drawing.Color.Black;
+            this.distanceLabel.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.distanceLabel.Font = new System.Drawing.Font("Courier New", 30F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.distanceLabel.ForeColor = System.Drawing.Color.Lime;
+            this.distanceLabel.Location = new System.Drawing.Point(15, 25);
+            this.distanceLabel.Name = "distanceLabel";
+            this.distanceLabel.Size = new System.Drawing.Size(320, 65);
+            this.distanceLabel.TabIndex = 0;
+            this.distanceLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
             // videoSourcePlayer
             // 
             this.videoSourcePlayer.BackColor = System.Drawing.SystemColors.ButtonShadow;
@@ -358,6 +383,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1054, 683);
+            this.Controls.Add(this.distanceMeasurementGroup);
             this.Controls.Add(this.botControlGroup);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
@@ -378,6 +404,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.portUpDown)).EndInit();
             this.groupBox2.ResumeLayout(false);
             this.botControlGroup.ResumeLayout(false);
+            this.distanceMeasurementGroup.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -412,6 +439,8 @@
         private System.Windows.Forms.ComboBox videoModeCombo;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Timer updateMotorsStateTimer;
+        private System.Windows.Forms.GroupBox distanceMeasurementGroup;
+        private System.Windows.Forms.Label distanceLabel;
     }
 }
 

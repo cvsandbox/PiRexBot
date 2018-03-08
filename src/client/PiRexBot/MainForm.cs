@@ -38,6 +38,8 @@ namespace PiRexBot
         bool               connected       = false;
 
         bool               distanceMeasurementAvailable = false;
+        Thread             distanceMeasurementThread    = null;
+        ManualResetEvent   stopDistanceMeasurementEvent = null;
 
         int                leftMotorPower  = 0;
         int                rightMotorPower = 0;
@@ -62,8 +64,11 @@ namespace PiRexBot
             // register for HTTP request completion events
             commandsThread.HttpCommandCompletion += commandsThread_HttpCommandCompletion;
 
-            // create event used for signalling about complete requested
+            // event used for signalling about complete requested
             commandProcessed = new AutoResetEvent( false );
+
+            //  event used for signalling distance measurement thread to stop
+            stopDistanceMeasurementEvent = new ManualResetEvent( false );
         }
 
         // Main form closing - close any connections
@@ -76,6 +81,23 @@ namespace PiRexBot
         private void ErrorBox( string message )
         {
             MessageBox.Show( this, message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Hand );
+        }
+
+        // Delegates to enable async calls for setting controls properties
+        private delegate void SetTextCallback( System.Windows.Forms.Control control, string text );
+
+        // Thread safe updating of control's text property
+        private void SetText( System.Windows.Forms.Control control, string text )
+        {
+            if ( control.InvokeRequired )
+            {
+                SetTextCallback d = new SetTextCallback( SetText );
+                Invoke( d, new object[] { control, text } );
+            }
+            else
+            {
+                control.Text = text;
+            }
         }
 
         // Enable/disable controls available on successful connection.
@@ -209,6 +231,15 @@ namespace PiRexBot
                     }
 
                     videoSourcePlayer.Start( );
+
+                    // start distance measurement thread
+                    distanceLabel.Text = ( distanceMeasurementAvailable ) ? string.Empty : "Unavailable";
+                    if ( distanceMeasurementAvailable )
+                    {
+                        stopDistanceMeasurementEvent.Reset( );
+                        distanceMeasurementThread = new Thread( new ThreadStart( DistanceMeasurementThreadHandler ) );
+                        distanceMeasurementThread.Start( );
+                    }
                 }
             }
 
@@ -220,6 +251,9 @@ namespace PiRexBot
         // Disconnect from PiRex bot
         private void Disconnect( )
         {
+            stopDistanceMeasurementEvent.Set( );
+            distanceMeasurementThread = null;
+
             commandsThread.SignalToStop( );
             commandsThread.WaitForStop( );
 
@@ -228,6 +262,7 @@ namespace PiRexBot
             videoSourcePlayer.VideoSource = null;
 
             EnableConnectionControls( false );
+            distanceLabel.Text = string.Empty;
         }
 
         // Connect/Disconnect button clicked
@@ -354,6 +389,42 @@ namespace PiRexBot
             string postData = string.Format( "{{\"leftPower\":{0}, \"rightPower\":{1}}}", leftMotorPower, rightMotorPower );
 
             commandsThread.EnqueuePostRequest( "/motors/config", postData, true );
+        }
+
+        // Handler of the thread to query distance measurements
+        void DistanceMeasurementThreadHandler( )
+        {
+            while ( !stopDistanceMeasurementEvent.WaitOne( 50, false ) )
+            {
+                string strDistance = "?";
+
+                try
+                {
+                    WaitRequestCompletion( "/distance" );
+
+                    int valueIndex = commandMessage.IndexOf( "\"medianDistance\":\"" );
+
+                    if ( valueIndex != -1 )
+                    {
+                        valueIndex += 18;
+
+                        int delimiterIndex = commandMessage.IndexOf( '"', valueIndex );
+
+                        if ( delimiterIndex != -1 )
+                        {
+                            float distance = float.Parse( commandMessage.Substring( valueIndex, delimiterIndex - valueIndex ) );
+
+                            strDistance = distance.ToString( "0.00" ) + " cm";
+                        }
+                    }
+                }
+                catch ( Exception )
+                {
+
+                }
+
+                SetText( distanceLabel, strDistance );
+            }
         }
     }
 }
