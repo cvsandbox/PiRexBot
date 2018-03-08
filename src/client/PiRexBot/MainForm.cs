@@ -28,6 +28,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Threading;
+using System.Diagnostics;
 using AForge.Video;
 
 namespace PiRexBot
@@ -36,6 +37,8 @@ namespace PiRexBot
     {
         HttpCommandsThread commandsThread  = new HttpCommandsThread( null );
         bool               connected       = false;
+
+        Stopwatch          fpsStopWatch    = null;
 
         bool               distanceMeasurementAvailable = false;
         Thread             distanceMeasurementThread    = null;
@@ -240,6 +243,11 @@ namespace PiRexBot
                         distanceMeasurementThread = new Thread( new ThreadStart( DistanceMeasurementThreadHandler ) );
                         distanceMeasurementThread.Start( );
                     }
+
+                    // start timer for reporting video FPS
+                    fpsTimer.Start( );
+
+                    connectionStatusLabel.Text = "Connected to PiRex bot";
                 }
             }
 
@@ -251,6 +259,8 @@ namespace PiRexBot
         // Disconnect from PiRex bot
         private void Disconnect( )
         {
+            fpsTimer.Stop( );
+
             stopDistanceMeasurementEvent.Set( );
             distanceMeasurementThread = null;
 
@@ -262,7 +272,9 @@ namespace PiRexBot
             videoSourcePlayer.VideoSource = null;
 
             EnableConnectionControls( false );
-            distanceLabel.Text = string.Empty;
+            distanceLabel.Text         = string.Empty;
+            fpsStatusLabel.Text        = string.Empty;
+            connectionStatusLabel.Text = string.Empty;
         }
 
         // Connect/Disconnect button clicked
@@ -414,7 +426,7 @@ namespace PiRexBot
                         {
                             float distance = float.Parse( commandMessage.Substring( valueIndex, delimiterIndex - valueIndex ) );
 
-                            strDistance = distance.ToString( "0.00" ) + " cm";
+                            strDistance = distance.ToString( "F2" ) + " cm";
                         }
                     }
                 }
@@ -424,6 +436,34 @@ namespace PiRexBot
                 }
 
                 SetText( distanceLabel, strDistance );
+            }
+        }
+
+        // Update video FPS info
+        private void fpsTimer_Tick( object sender, EventArgs e )
+        {
+            IVideoSource videoSource = videoSourcePlayer.VideoSource;
+
+            if ( videoSource != null )
+            {
+                // get number of frames since the last timer tick
+                int framesReceived = videoSource.FramesReceived;
+
+                if ( fpsStopWatch == null )
+                {
+                    fpsStopWatch = new Stopwatch( );
+                    fpsStopWatch.Start( );
+                }
+                else
+                {
+                    fpsStopWatch.Stop( );
+
+                    float fps = 1000.0f * framesReceived / fpsStopWatch.ElapsedMilliseconds;
+                    fpsStatusLabel.Text = fps.ToString( "F2" ) + " fps";
+
+                    fpsStopWatch.Reset( );
+                    fpsStopWatch.Start( );
+                }
             }
         }
     }

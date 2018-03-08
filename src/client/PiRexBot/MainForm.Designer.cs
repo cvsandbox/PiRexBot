@@ -58,8 +58,12 @@
             this.updateMotorsStateTimer = new System.Windows.Forms.Timer(this.components);
             this.distanceMeasurementGroup = new System.Windows.Forms.GroupBox();
             this.distanceLabel = new System.Windows.Forms.Label();
+            this.connectionStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
+            this.fpsStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.videoSourcePlayer = new AForge.Controls.VideoSourcePlayer();
+            this.fpsTimer = new System.Windows.Forms.Timer(this.components);
             this.menuStrip.SuspendLayout();
+            this.statusStrip.SuspendLayout();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.portUpDown)).BeginInit();
             this.groupBox2.SuspendLayout();
@@ -96,9 +100,12 @@
             // statusStrip
             // 
             this.statusStrip.ImageScalingSize = new System.Drawing.Size(20, 20);
-            this.statusStrip.Location = new System.Drawing.Point(0, 661);
+            this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.connectionStatusLabel,
+            this.fpsStatusLabel});
+            this.statusStrip.Location = new System.Drawing.Point(0, 658);
             this.statusStrip.Name = "statusStrip";
-            this.statusStrip.Size = new System.Drawing.Size(1054, 22);
+            this.statusStrip.Size = new System.Drawing.Size(1054, 25);
             this.statusStrip.TabIndex = 1;
             this.statusStrip.Text = "statusStrip1";
             // 
@@ -369,6 +376,28 @@
             this.distanceLabel.TabIndex = 0;
             this.distanceLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
+            // connectionStatusLabel
+            // 
+            this.connectionStatusLabel.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top) 
+            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Right) 
+            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
+            this.connectionStatusLabel.BorderStyle = System.Windows.Forms.Border3DStyle.SunkenOuter;
+            this.connectionStatusLabel.Name = "connectionStatusLabel";
+            this.connectionStatusLabel.Size = new System.Drawing.Size(889, 20);
+            this.connectionStatusLabel.Spring = true;
+            this.connectionStatusLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // fpsStatusLabel
+            // 
+            this.fpsStatusLabel.AutoSize = false;
+            this.fpsStatusLabel.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top) 
+            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Right) 
+            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
+            this.fpsStatusLabel.BorderStyle = System.Windows.Forms.Border3DStyle.SunkenOuter;
+            this.fpsStatusLabel.Name = "fpsStatusLabel";
+            this.fpsStatusLabel.Size = new System.Drawing.Size(150, 20);
+            this.fpsStatusLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
             // videoSourcePlayer
             // 
             this.videoSourcePlayer.BackColor = System.Drawing.SystemColors.ButtonShadow;
@@ -377,6 +406,11 @@
             this.videoSourcePlayer.Size = new System.Drawing.Size(642, 482);
             this.videoSourcePlayer.TabIndex = 0;
             this.videoSourcePlayer.VideoSource = null;
+            // 
+            // fpsTimer
+            // 
+            this.fpsTimer.Interval = 1000;
+            this.fpsTimer.Tick += new System.EventHandler(this.fpsTimer_Tick);
             // 
             // MainForm
             // 
@@ -399,6 +433,8 @@
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             this.menuStrip.ResumeLayout(false);
             this.menuStrip.PerformLayout();
+            this.statusStrip.ResumeLayout(false);
+            this.statusStrip.PerformLayout();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.portUpDown)).EndInit();
@@ -441,6 +477,9 @@
         private System.Windows.Forms.Timer updateMotorsStateTimer;
         private System.Windows.Forms.GroupBox distanceMeasurementGroup;
         private System.Windows.Forms.Label distanceLabel;
+        private System.Windows.Forms.ToolStripStatusLabel connectionStatusLabel;
+        private System.Windows.Forms.ToolStripStatusLabel fpsStatusLabel;
+        private System.Windows.Forms.Timer fpsTimer;
     }
 }
 
