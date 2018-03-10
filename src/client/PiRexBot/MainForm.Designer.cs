@@ -34,6 +34,8 @@
             this.fileMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip = new System.Windows.Forms.StatusStrip();
+            this.connectionStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
+            this.fpsStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.videoModeCombo = new System.Windows.Forms.ComboBox();
             this.label4 = new System.Windows.Forms.Label();
@@ -58,10 +60,8 @@
             this.updateMotorsStateTimer = new System.Windows.Forms.Timer(this.components);
             this.distanceMeasurementGroup = new System.Windows.Forms.GroupBox();
             this.distanceLabel = new System.Windows.Forms.Label();
-            this.connectionStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
-            this.fpsStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
-            this.videoSourcePlayer = new AForge.Controls.VideoSourcePlayer();
             this.fpsTimer = new System.Windows.Forms.Timer(this.components);
+            this.videoSourcePlayer = new AForge.Controls.VideoSourcePlayer();
             this.menuStrip.SuspendLayout();
             this.statusStrip.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -109,6 +109,28 @@
             this.statusStrip.TabIndex = 1;
             this.statusStrip.Text = "statusStrip1";
             // 
+            // connectionStatusLabel
+            // 
+            this.connectionStatusLabel.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top) 
+            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Right) 
+            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
+            this.connectionStatusLabel.BorderStyle = System.Windows.Forms.Border3DStyle.SunkenOuter;
+            this.connectionStatusLabel.Name = "connectionStatusLabel";
+            this.connectionStatusLabel.Size = new System.Drawing.Size(889, 20);
+            this.connectionStatusLabel.Spring = true;
+            this.connectionStatusLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // fpsStatusLabel
+            // 
+            this.fpsStatusLabel.AutoSize = false;
+            this.fpsStatusLabel.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top) 
+            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Right) 
+            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
+            this.fpsStatusLabel.BorderStyle = System.Windows.Forms.Border3DStyle.SunkenOuter;
+            this.fpsStatusLabel.Name = "fpsStatusLabel";
+            this.fpsStatusLabel.Size = new System.Drawing.Size(150, 20);
+            this.fpsStatusLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
             // groupBox1
             // 
             this.groupBox1.Controls.Add(this.videoModeCombo);
@@ -132,6 +154,7 @@
             // videoModeCombo
             // 
             this.videoModeCombo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.videoModeCombo.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.videoModeCombo.FormattingEnabled = true;
             this.videoModeCombo.Items.AddRange(new object[] {
             "MJPEG",
@@ -148,7 +171,7 @@
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(48, 17);
             this.label4.TabIndex = 4;
-            this.label4.Text = "Video:";
+            this.label4.Text = "&Video:";
             // 
             // passwordBox
             // 
@@ -165,7 +188,7 @@
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(73, 17);
             this.label3.TabIndex = 8;
-            this.label3.Text = "Password:";
+            this.label3.Text = "&Password:";
             // 
             // loginBox
             // 
@@ -181,7 +204,7 @@
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(47, 17);
             this.label2.TabIndex = 6;
-            this.label2.Text = "Login:";
+            this.label2.Text = "&Login:";
             // 
             // connectButton
             // 
@@ -222,7 +245,7 @@
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(38, 17);
             this.label1.TabIndex = 2;
-            this.label1.Text = "Port:";
+            this.label1.Text = "P&ort:";
             // 
             // ipAddressBox
             // 
@@ -238,7 +261,7 @@
             this.ipAddressLabel.Name = "ipAddressLabel";
             this.ipAddressLabel.Size = new System.Drawing.Size(80, 17);
             this.ipAddressLabel.TabIndex = 0;
-            this.ipAddressLabel.Text = "IP Address:";
+            this.ipAddressLabel.Text = "IP &Address:";
             // 
             // groupBox2
             // 
@@ -368,7 +391,7 @@
             // 
             this.distanceLabel.BackColor = System.Drawing.Color.Black;
             this.distanceLabel.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.distanceLabel.Font = new System.Drawing.Font("Courier New", 30F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.distanceLabel.Font = new System.Drawing.Font("Courier New", 25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.distanceLabel.ForeColor = System.Drawing.Color.Lime;
             this.distanceLabel.Location = new System.Drawing.Point(15, 25);
             this.distanceLabel.Name = "distanceLabel";
@@ -376,27 +399,10 @@
             this.distanceLabel.TabIndex = 0;
             this.distanceLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // connectionStatusLabel
+            // fpsTimer
             // 
-            this.connectionStatusLabel.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top) 
-            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Right) 
-            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
-            this.connectionStatusLabel.BorderStyle = System.Windows.Forms.Border3DStyle.SunkenOuter;
-            this.connectionStatusLabel.Name = "connectionStatusLabel";
-            this.connectionStatusLabel.Size = new System.Drawing.Size(889, 20);
-            this.connectionStatusLabel.Spring = true;
-            this.connectionStatusLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // fpsStatusLabel
-            // 
-            this.fpsStatusLabel.AutoSize = false;
-            this.fpsStatusLabel.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top) 
-            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Right) 
-            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
-            this.fpsStatusLabel.BorderStyle = System.Windows.Forms.Border3DStyle.SunkenOuter;
-            this.fpsStatusLabel.Name = "fpsStatusLabel";
-            this.fpsStatusLabel.Size = new System.Drawing.Size(150, 20);
-            this.fpsStatusLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.fpsTimer.Interval = 1000;
+            this.fpsTimer.Tick += new System.EventHandler(this.fpsTimer_Tick);
             // 
             // videoSourcePlayer
             // 
@@ -406,11 +412,6 @@
             this.videoSourcePlayer.Size = new System.Drawing.Size(642, 482);
             this.videoSourcePlayer.TabIndex = 0;
             this.videoSourcePlayer.VideoSource = null;
-            // 
-            // fpsTimer
-            // 
-            this.fpsTimer.Interval = 1000;
-            this.fpsTimer.Tick += new System.EventHandler(this.fpsTimer_Tick);
             // 
             // MainForm
             // 
