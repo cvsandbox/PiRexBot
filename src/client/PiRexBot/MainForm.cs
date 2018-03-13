@@ -29,6 +29,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Threading;
 using System.Diagnostics;
+using AForge.Controls;
 using AForge.Video;
 
 namespace PiRexBot
@@ -36,6 +37,7 @@ namespace PiRexBot
     public partial class MainForm : Form
     {
         HttpCommandsThread commandsThread  = new HttpCommandsThread( null );
+        Joystick           gamePad         = null;
         bool               connected       = false;
 
         Stopwatch          fpsStopWatch    = null;
@@ -53,7 +55,13 @@ namespace PiRexBot
         string             commandMessage  = null;
         AutoResetEvent     commandProcessed;
 
+        // Time out value used for waiting HTTP command's result.
         const int          commandTimeout  = 10000;
+
+        // Minimum absolute value of game pad's axis to handle.
+        // If it is less than that, it is ignored (treated as zero).
+        const float        minGamePadValue = 0.1f;
+
 
         public MainForm( )
         {
@@ -72,11 +80,35 @@ namespace PiRexBot
 
             //  event used for signalling distance measurement thread to stop
             stopDistanceMeasurementEvent = new ManualResetEvent( false );
+
+            // check for available game pads in the system
+            List<Joystick.DeviceInfo> gamepadDevices = Joystick.GetAvailableDevices( );
+            if ( gamepadDevices.Count == 0 )
+            {
+                gamePadsCombo.Items.Add( "Not available" );
+                gamePadsCombo.Enabled    = false;
+                useGamepadButton.Enabled = false;
+            }
+            else
+            {
+                foreach ( Joystick.DeviceInfo pad in gamepadDevices )
+                {
+                    gamePadsCombo.Items.Add( pad.Name );
+                }
+            }
+
+            gamePadsCombo.SelectedIndex = 0;
         }
 
         // Main form closing - close any connections
         private void MainForm_FormClosing( object sender, FormClosingEventArgs e )
         {
+            if ( gamePad != null )
+            {
+                gamePadTimer.Stop( );
+                gamePad = null;
+            }
+
             Disconnect( );
         }
 
@@ -94,8 +126,15 @@ namespace PiRexBot
         {
             if ( control.InvokeRequired )
             {
-                SetTextCallback d = new SetTextCallback( SetText );
-                Invoke( d, new object[] { control, text } );
+                try
+                {
+                    SetTextCallback d = new SetTextCallback( SetText );
+                    Invoke( d, new object[] { control, text } );
+                }
+                catch
+                {
+
+                }
             }
             else
             {
@@ -274,6 +313,7 @@ namespace PiRexBot
             EnableConnectionControls( false );
             distanceLabel.Text         = string.Empty;
             fpsStatusLabel.Text        = string.Empty;
+            motorsStatusLabel.Text     = string.Empty;
             connectionStatusLabel.Text = string.Empty;
         }
 
@@ -401,6 +441,8 @@ namespace PiRexBot
             string postData = string.Format( "{{\"leftPower\":{0}, \"rightPower\":{1}}}", leftMotorPower, rightMotorPower );
 
             commandsThread.EnqueuePostRequest( "/motors/config", postData, true );
+
+            motorsStatusLabel.Text = string.Format( "Left: {0}, Right: {1}", leftMotorPower, rightMotorPower );
         }
 
         // Handler of the thread to query distance measurements
@@ -471,6 +513,60 @@ namespace PiRexBot
         private void aboutMenuItem_Click( object sender, EventArgs e )
         {
             ( new AboutBox( ) ).ShowDialog( );
+        }
+
+        // Start/Stop using selected game pad device for controlling robot
+        private void useGamepadButton_Click( object sender, EventArgs e )
+        {
+            if ( gamePad == null )
+            {
+                try
+                {
+                    gamePad = new Joystick( gamePadsCombo.SelectedIndex );
+                    gamePadTimer.Start( );
+                    gamePadsCombo.Enabled = false;
+                    useGamepadButton.Text = "&Release it";
+                }
+                catch ( Exception ex )
+                {
+                    ErrorBox( ex.Message );
+                }
+            }
+            else
+            {
+                gamePadTimer.Stop( );
+                gamePad = null;
+                gamePadsCombo.Enabled = true;
+                useGamepadButton.Text = "&Use it";
+            }
+        }
+
+        // Handler for the timer used to check for game pad's status
+        private void gamePadTimer_Tick( object sender, EventArgs e )
+        {
+            //if ( ( connected ) && ( gamePad != null ) )
+            {
+                Joystick.Status status = gamePad.GetCurrentStatus( );
+
+                // invert Y/Z axes - moving them up means forward (positive) direction for robot
+                float yAxis = -status.YAxis;
+                float zAxis = -status.ZAxis;
+
+                // ignore too small values, since game pad's axis hardly ever reports 0.0 value even when centered
+                if ( Math.Abs( yAxis ) < minGamePadValue )
+                {
+                    yAxis = 0;
+                }
+                if ( Math.Abs( zAxis ) < minGamePadValue )
+                {
+                    zAxis = 0;
+                }
+
+                // convert axes values to motors' speed
+                leftMotorPower  = (int) ( yAxis * 100 );
+                rightMotorPower = (int) ( zAxis * 100 );
+                UpdateMotorsState( );
+            }
         }
     }
 }

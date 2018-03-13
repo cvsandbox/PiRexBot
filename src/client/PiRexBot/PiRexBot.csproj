@@ -50,12 +50,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AForge.NET\Controls\Joystick.cs" />
+    <Compile Include="AForge.NET\Controls\JoystickAPI.cs" />
     <Compile Include="AForge.NET\Controls\VideoSourcePlayer.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="AForge.NET\Controls\VideoSourcePlayer.Designer.cs">
       <DependentUpon>VideoSourcePlayer.cs</DependentUpon>
     </Compile>
+    <Compile Include="AForge.NET\Core\Exceptions.cs" />
     <Compile Include="AForge.NET\Core\SystemTools.cs" />
     <Compile Include="AForge.NET\Imaging\Exceptions.cs" />
     <Compile Include="AForge.NET\Imaging\Image.cs" />

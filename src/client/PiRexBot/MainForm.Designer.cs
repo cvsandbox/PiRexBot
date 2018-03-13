@@ -33,6 +33,8 @@
             this.menuStrip = new System.Windows.Forms.MenuStrip();
             this.fileMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.aboutMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.connectionStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.fpsStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
@@ -49,21 +51,24 @@
             this.ipAddressBox = new System.Windows.Forms.TextBox();
             this.ipAddressLabel = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.videoSourcePlayer = new AForge.Controls.VideoSourcePlayer();
             this.botControlGroup = new System.Windows.Forms.GroupBox();
-            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.updateMotorsStateTimer = new System.Windows.Forms.Timer(this.components);
-            this.distanceMeasurementGroup = new System.Windows.Forms.GroupBox();
-            this.distanceLabel = new System.Windows.Forms.Label();
-            this.fpsTimer = new System.Windows.Forms.Timer(this.components);
             this.rotateRightButton = new System.Windows.Forms.Button();
             this.moveBackwardButton = new System.Windows.Forms.Button();
             this.rotateLeftButton = new System.Windows.Forms.Button();
             this.moveRightButton = new System.Windows.Forms.Button();
             this.moveForwardButton = new System.Windows.Forms.Button();
             this.moveLeftButton = new System.Windows.Forms.Button();
-            this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.aboutMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.updateMotorsStateTimer = new System.Windows.Forms.Timer(this.components);
+            this.distanceMeasurementGroup = new System.Windows.Forms.GroupBox();
+            this.distanceLabel = new System.Windows.Forms.Label();
+            this.fpsTimer = new System.Windows.Forms.Timer(this.components);
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.gamePadsCombo = new System.Windows.Forms.ComboBox();
+            this.useGamepadButton = new System.Windows.Forms.Button();
+            this.gamePadTimer = new System.Windows.Forms.Timer(this.components);
+            this.motorsStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
+            this.videoSourcePlayer = new AForge.Controls.VideoSourcePlayer();
             this.menuStrip.SuspendLayout();
             this.statusStrip.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -71,6 +76,7 @@
             this.groupBox2.SuspendLayout();
             this.botControlGroup.SuspendLayout();
             this.distanceMeasurementGroup.SuspendLayout();
+            this.groupBox3.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip
@@ -100,11 +106,27 @@
             this.exitMenuItem.Text = "E&xit";
             this.exitMenuItem.Click += new System.EventHandler(this.exitMenuItem_Click);
             // 
+            // helpToolStripMenuItem
+            // 
+            this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.aboutMenuItem});
+            this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
+            this.helpToolStripMenuItem.Size = new System.Drawing.Size(53, 24);
+            this.helpToolStripMenuItem.Text = "&Help";
+            // 
+            // aboutMenuItem
+            // 
+            this.aboutMenuItem.Name = "aboutMenuItem";
+            this.aboutMenuItem.Size = new System.Drawing.Size(119, 24);
+            this.aboutMenuItem.Text = "&About";
+            this.aboutMenuItem.Click += new System.EventHandler(this.aboutMenuItem_Click);
+            // 
             // statusStrip
             // 
             this.statusStrip.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.connectionStatusLabel,
+            this.motorsStatusLabel,
             this.fpsStatusLabel});
             this.statusStrip.Location = new System.Drawing.Point(0, 658);
             this.statusStrip.Name = "statusStrip";
@@ -119,7 +141,7 @@
             | System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
             this.connectionStatusLabel.BorderStyle = System.Windows.Forms.Border3DStyle.SunkenOuter;
             this.connectionStatusLabel.Name = "connectionStatusLabel";
-            this.connectionStatusLabel.Size = new System.Drawing.Size(889, 20);
+            this.connectionStatusLabel.Size = new System.Drawing.Size(650, 20);
             this.connectionStatusLabel.Spring = true;
             this.connectionStatusLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -276,15 +298,6 @@
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Camera View";
             // 
-            // videoSourcePlayer
-            // 
-            this.videoSourcePlayer.BackColor = System.Drawing.SystemColors.ButtonShadow;
-            this.videoSourcePlayer.Location = new System.Drawing.Point(15, 25);
-            this.videoSourcePlayer.Name = "videoSourcePlayer";
-            this.videoSourcePlayer.Size = new System.Drawing.Size(642, 482);
-            this.videoSourcePlayer.TabIndex = 0;
-            this.videoSourcePlayer.VideoSource = null;
-            // 
             // botControlGroup
             // 
             this.botControlGroup.Controls.Add(this.rotateRightButton);
@@ -296,41 +309,9 @@
             this.botControlGroup.Location = new System.Drawing.Point(692, 135);
             this.botControlGroup.Name = "botControlGroup";
             this.botControlGroup.Size = new System.Drawing.Size(350, 250);
-            this.botControlGroup.TabIndex = 3;
+            this.botControlGroup.TabIndex = 4;
             this.botControlGroup.TabStop = false;
             this.botControlGroup.Text = "Bot control";
-            // 
-            // updateMotorsStateTimer
-            // 
-            this.updateMotorsStateTimer.Interval = 250;
-            this.updateMotorsStateTimer.Tick += new System.EventHandler(this.updateMotorsStateTimer_Tick);
-            // 
-            // distanceMeasurementGroup
-            // 
-            this.distanceMeasurementGroup.Controls.Add(this.distanceLabel);
-            this.distanceMeasurementGroup.Location = new System.Drawing.Point(692, 390);
-            this.distanceMeasurementGroup.Name = "distanceMeasurementGroup";
-            this.distanceMeasurementGroup.Size = new System.Drawing.Size(350, 100);
-            this.distanceMeasurementGroup.TabIndex = 4;
-            this.distanceMeasurementGroup.TabStop = false;
-            this.distanceMeasurementGroup.Text = "Distance measurement";
-            // 
-            // distanceLabel
-            // 
-            this.distanceLabel.BackColor = System.Drawing.Color.Black;
-            this.distanceLabel.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.distanceLabel.Font = new System.Drawing.Font("Courier New", 25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.distanceLabel.ForeColor = System.Drawing.Color.Lime;
-            this.distanceLabel.Location = new System.Drawing.Point(15, 25);
-            this.distanceLabel.Name = "distanceLabel";
-            this.distanceLabel.Size = new System.Drawing.Size(320, 65);
-            this.distanceLabel.TabIndex = 0;
-            this.distanceLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // fpsTimer
-            // 
-            this.fpsTimer.Interval = 1000;
-            this.fpsTimer.Tick += new System.EventHandler(this.fpsTimer_Tick);
             // 
             // rotateRightButton
             // 
@@ -416,26 +397,100 @@
             this.moveLeftButton.MouseLeave += new System.EventHandler(this.controlButton_MouseLeave);
             this.moveLeftButton.MouseUp += new System.Windows.Forms.MouseEventHandler(this.controlButton_MouseUp);
             // 
-            // helpToolStripMenuItem
+            // updateMotorsStateTimer
             // 
-            this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.aboutMenuItem});
-            this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
-            this.helpToolStripMenuItem.Size = new System.Drawing.Size(53, 24);
-            this.helpToolStripMenuItem.Text = "&Help";
+            this.updateMotorsStateTimer.Interval = 250;
+            this.updateMotorsStateTimer.Tick += new System.EventHandler(this.updateMotorsStateTimer_Tick);
             // 
-            // aboutMenuItem
+            // distanceMeasurementGroup
             // 
-            this.aboutMenuItem.Name = "aboutMenuItem";
-            this.aboutMenuItem.Size = new System.Drawing.Size(175, 24);
-            this.aboutMenuItem.Text = "&About";
-            this.aboutMenuItem.Click += new System.EventHandler(this.aboutMenuItem_Click);
+            this.distanceMeasurementGroup.Controls.Add(this.distanceLabel);
+            this.distanceMeasurementGroup.Location = new System.Drawing.Point(692, 390);
+            this.distanceMeasurementGroup.Name = "distanceMeasurementGroup";
+            this.distanceMeasurementGroup.Size = new System.Drawing.Size(350, 100);
+            this.distanceMeasurementGroup.TabIndex = 5;
+            this.distanceMeasurementGroup.TabStop = false;
+            this.distanceMeasurementGroup.Text = "Distance measurement";
+            // 
+            // distanceLabel
+            // 
+            this.distanceLabel.BackColor = System.Drawing.Color.Black;
+            this.distanceLabel.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.distanceLabel.Font = new System.Drawing.Font("Courier New", 25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.distanceLabel.ForeColor = System.Drawing.Color.Lime;
+            this.distanceLabel.Location = new System.Drawing.Point(15, 25);
+            this.distanceLabel.Name = "distanceLabel";
+            this.distanceLabel.Size = new System.Drawing.Size(320, 65);
+            this.distanceLabel.TabIndex = 0;
+            this.distanceLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // fpsTimer
+            // 
+            this.fpsTimer.Interval = 1000;
+            this.fpsTimer.Tick += new System.EventHandler(this.fpsTimer_Tick);
+            // 
+            // groupBox3
+            // 
+            this.groupBox3.Controls.Add(this.useGamepadButton);
+            this.groupBox3.Controls.Add(this.gamePadsCombo);
+            this.groupBox3.Location = new System.Drawing.Point(692, 35);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(350, 90);
+            this.groupBox3.TabIndex = 3;
+            this.groupBox3.TabStop = false;
+            this.groupBox3.Text = "Game pad to use";
+            // 
+            // gamePadsCombo
+            // 
+            this.gamePadsCombo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.gamePadsCombo.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.gamePadsCombo.FormattingEnabled = true;
+            this.gamePadsCombo.Location = new System.Drawing.Point(10, 25);
+            this.gamePadsCombo.Name = "gamePadsCombo";
+            this.gamePadsCombo.Size = new System.Drawing.Size(325, 24);
+            this.gamePadsCombo.TabIndex = 0;
+            // 
+            // useGamepadButton
+            // 
+            this.useGamepadButton.Location = new System.Drawing.Point(235, 53);
+            this.useGamepadButton.Name = "useGamepadButton";
+            this.useGamepadButton.Size = new System.Drawing.Size(101, 24);
+            this.useGamepadButton.TabIndex = 11;
+            this.useGamepadButton.Text = "&Use it";
+            this.useGamepadButton.UseVisualStyleBackColor = true;
+            this.useGamepadButton.Click += new System.EventHandler(this.useGamepadButton_Click);
+            // 
+            // gamePadTimer
+            // 
+            this.gamePadTimer.Interval = 40;
+            this.gamePadTimer.Tick += new System.EventHandler(this.gamePadTimer_Tick);
+            // 
+            // motorsStatusLabel
+            // 
+            this.motorsStatusLabel.AutoSize = false;
+            this.motorsStatusLabel.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top) 
+            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Right) 
+            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
+            this.motorsStatusLabel.BorderStyle = System.Windows.Forms.Border3DStyle.SunkenOuter;
+            this.motorsStatusLabel.Name = "motorsStatusLabel";
+            this.motorsStatusLabel.Size = new System.Drawing.Size(200, 20);
+            this.motorsStatusLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // videoSourcePlayer
+            // 
+            this.videoSourcePlayer.BackColor = System.Drawing.SystemColors.ButtonShadow;
+            this.videoSourcePlayer.Location = new System.Drawing.Point(15, 25);
+            this.videoSourcePlayer.Name = "videoSourcePlayer";
+            this.videoSourcePlayer.Size = new System.Drawing.Size(642, 482);
+            this.videoSourcePlayer.TabIndex = 0;
+            this.videoSourcePlayer.VideoSource = null;
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1054, 683);
+            this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.distanceMeasurementGroup);
             this.Controls.Add(this.botControlGroup);
             this.Controls.Add(this.groupBox2);
@@ -460,6 +515,7 @@
             this.groupBox2.ResumeLayout(false);
             this.botControlGroup.ResumeLayout(false);
             this.distanceMeasurementGroup.ResumeLayout(false);
+            this.groupBox3.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -501,6 +557,11 @@
         private System.Windows.Forms.Timer fpsTimer;
         private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem aboutMenuItem;
+        private System.Windows.Forms.GroupBox groupBox3;
+        private System.Windows.Forms.Button useGamepadButton;
+        private System.Windows.Forms.ComboBox gamePadsCombo;
+        private System.Windows.Forms.Timer gamePadTimer;
+        private System.Windows.Forms.ToolStripStatusLabel motorsStatusLabel;
     }
 }
 
