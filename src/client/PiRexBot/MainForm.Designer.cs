@@ -49,19 +49,21 @@
             this.ipAddressBox = new System.Windows.Forms.TextBox();
             this.ipAddressLabel = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.videoSourcePlayer = new AForge.Controls.VideoSourcePlayer();
             this.botControlGroup = new System.Windows.Forms.GroupBox();
+            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.updateMotorsStateTimer = new System.Windows.Forms.Timer(this.components);
+            this.distanceMeasurementGroup = new System.Windows.Forms.GroupBox();
+            this.distanceLabel = new System.Windows.Forms.Label();
+            this.fpsTimer = new System.Windows.Forms.Timer(this.components);
             this.rotateRightButton = new System.Windows.Forms.Button();
             this.moveBackwardButton = new System.Windows.Forms.Button();
             this.rotateLeftButton = new System.Windows.Forms.Button();
             this.moveRightButton = new System.Windows.Forms.Button();
             this.moveForwardButton = new System.Windows.Forms.Button();
             this.moveLeftButton = new System.Windows.Forms.Button();
-            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.updateMotorsStateTimer = new System.Windows.Forms.Timer(this.components);
-            this.distanceMeasurementGroup = new System.Windows.Forms.GroupBox();
-            this.distanceLabel = new System.Windows.Forms.Label();
-            this.fpsTimer = new System.Windows.Forms.Timer(this.components);
-            this.videoSourcePlayer = new AForge.Controls.VideoSourcePlayer();
+            this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.aboutMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip.SuspendLayout();
             this.statusStrip.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -75,7 +77,8 @@
             // 
             this.menuStrip.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.menuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.fileMenuItem});
+            this.fileMenuItem,
+            this.helpToolStripMenuItem});
             this.menuStrip.Location = new System.Drawing.Point(0, 0);
             this.menuStrip.Name = "menuStrip";
             this.menuStrip.Size = new System.Drawing.Size(1054, 28);
@@ -273,6 +276,15 @@
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Camera View";
             // 
+            // videoSourcePlayer
+            // 
+            this.videoSourcePlayer.BackColor = System.Drawing.SystemColors.ButtonShadow;
+            this.videoSourcePlayer.Location = new System.Drawing.Point(15, 25);
+            this.videoSourcePlayer.Name = "videoSourcePlayer";
+            this.videoSourcePlayer.Size = new System.Drawing.Size(642, 482);
+            this.videoSourcePlayer.TabIndex = 0;
+            this.videoSourcePlayer.VideoSource = null;
+            // 
             // botControlGroup
             // 
             this.botControlGroup.Controls.Add(this.rotateRightButton);
@@ -287,6 +299,38 @@
             this.botControlGroup.TabIndex = 3;
             this.botControlGroup.TabStop = false;
             this.botControlGroup.Text = "Bot control";
+            // 
+            // updateMotorsStateTimer
+            // 
+            this.updateMotorsStateTimer.Interval = 250;
+            this.updateMotorsStateTimer.Tick += new System.EventHandler(this.updateMotorsStateTimer_Tick);
+            // 
+            // distanceMeasurementGroup
+            // 
+            this.distanceMeasurementGroup.Controls.Add(this.distanceLabel);
+            this.distanceMeasurementGroup.Location = new System.Drawing.Point(692, 390);
+            this.distanceMeasurementGroup.Name = "distanceMeasurementGroup";
+            this.distanceMeasurementGroup.Size = new System.Drawing.Size(350, 100);
+            this.distanceMeasurementGroup.TabIndex = 4;
+            this.distanceMeasurementGroup.TabStop = false;
+            this.distanceMeasurementGroup.Text = "Distance measurement";
+            // 
+            // distanceLabel
+            // 
+            this.distanceLabel.BackColor = System.Drawing.Color.Black;
+            this.distanceLabel.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.distanceLabel.Font = new System.Drawing.Font("Courier New", 25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.distanceLabel.ForeColor = System.Drawing.Color.Lime;
+            this.distanceLabel.Location = new System.Drawing.Point(15, 25);
+            this.distanceLabel.Name = "distanceLabel";
+            this.distanceLabel.Size = new System.Drawing.Size(320, 65);
+            this.distanceLabel.TabIndex = 0;
+            this.distanceLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // fpsTimer
+            // 
+            this.fpsTimer.Interval = 1000;
+            this.fpsTimer.Tick += new System.EventHandler(this.fpsTimer_Tick);
             // 
             // rotateRightButton
             // 
@@ -372,46 +416,20 @@
             this.moveLeftButton.MouseLeave += new System.EventHandler(this.controlButton_MouseLeave);
             this.moveLeftButton.MouseUp += new System.Windows.Forms.MouseEventHandler(this.controlButton_MouseUp);
             // 
-            // updateMotorsStateTimer
+            // helpToolStripMenuItem
             // 
-            this.updateMotorsStateTimer.Interval = 250;
-            this.updateMotorsStateTimer.Tick += new System.EventHandler(this.updateMotorsStateTimer_Tick);
+            this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.aboutMenuItem});
+            this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
+            this.helpToolStripMenuItem.Size = new System.Drawing.Size(53, 24);
+            this.helpToolStripMenuItem.Text = "&Help";
             // 
-            // distanceMeasurementGroup
+            // aboutMenuItem
             // 
-            this.distanceMeasurementGroup.Controls.Add(this.distanceLabel);
-            this.distanceMeasurementGroup.Location = new System.Drawing.Point(692, 390);
-            this.distanceMeasurementGroup.Name = "distanceMeasurementGroup";
-            this.distanceMeasurementGroup.Size = new System.Drawing.Size(350, 100);
-            this.distanceMeasurementGroup.TabIndex = 4;
-            this.distanceMeasurementGroup.TabStop = false;
-            this.distanceMeasurementGroup.Text = "Distance measurement";
-            // 
-            // distanceLabel
-            // 
-            this.distanceLabel.BackColor = System.Drawing.Color.Black;
-            this.distanceLabel.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.distanceLabel.Font = new System.Drawing.Font("Courier New", 25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.distanceLabel.ForeColor = System.Drawing.Color.Lime;
-            this.distanceLabel.Location = new System.Drawing.Point(15, 25);
-            this.distanceLabel.Name = "distanceLabel";
-            this.distanceLabel.Size = new System.Drawing.Size(320, 65);
-            this.distanceLabel.TabIndex = 0;
-            this.distanceLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // fpsTimer
-            // 
-            this.fpsTimer.Interval = 1000;
-            this.fpsTimer.Tick += new System.EventHandler(this.fpsTimer_Tick);
-            // 
-            // videoSourcePlayer
-            // 
-            this.videoSourcePlayer.BackColor = System.Drawing.SystemColors.ButtonShadow;
-            this.videoSourcePlayer.Location = new System.Drawing.Point(15, 25);
-            this.videoSourcePlayer.Name = "videoSourcePlayer";
-            this.videoSourcePlayer.Size = new System.Drawing.Size(642, 482);
-            this.videoSourcePlayer.TabIndex = 0;
-            this.videoSourcePlayer.VideoSource = null;
+            this.aboutMenuItem.Name = "aboutMenuItem";
+            this.aboutMenuItem.Size = new System.Drawing.Size(175, 24);
+            this.aboutMenuItem.Text = "&About";
+            this.aboutMenuItem.Click += new System.EventHandler(this.aboutMenuItem_Click);
             // 
             // MainForm
             // 
@@ -481,6 +499,8 @@
         private System.Windows.Forms.ToolStripStatusLabel connectionStatusLabel;
         private System.Windows.Forms.ToolStripStatusLabel fpsStatusLabel;
         private System.Windows.Forms.Timer fpsTimer;
+        private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem aboutMenuItem;
     }
 }
 

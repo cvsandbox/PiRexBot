@@ -117,26 +117,32 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="rotate_left" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Images\rotate_left.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="label5.Text" xml:space="preserve">
+    <value>This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.</value>
   </data>
-  <data name="forward" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Images\forward.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="slight_left" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Images\slight_left.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="backward" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Images\backward.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="slight_right" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Images\slight_right.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="rotate_right" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Images\rotate_right.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="pirex_80" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Images\pirex_80.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        AAABAAEAEBAAAAEAIABoBAAAFgAAACgAAAAQAAAAIAAAAAEAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        AAB0XVwAdF1cAHRdXAB0XFwA////AP///wBdW1tIXlxc31xcXM2bmZkX////AP///wD///8AhcXHAIXF
+        xwCFxccAMLW6AP///wD///8A////AP///wD///8AZ2Fhx4SEhP9SUVD/cWZkgP///wD///8A////AP//
+        /wD///8A////AAD//wD///8A////AP///wD///8AVG1tDFV/gO1gr7H/R3Jy/0JoacT///8A////AP//
+        /wD///8A////AP///wAA9f0A////AP///wD///8A////AAzN10U5i5H9VZug/0R/g/8hhYvtAOLsEv//
+        /wD///8A////AP///wD///8AAPX9AP///wD///8AAPH6Av///wAo6vPLnOHn/8bW2f/K5ef/sO/y/xXq
+        84P///8AAPP7Av///wD///8A////AAD0/AD///8AAPX9AgD2/gYA8/4KT/f/+tT////k6+v/5PX0/+X/
+        //8m7/vR////AAD2/gwA8/sC////AP///wAA7/gA////AAD0/AT///8ACfH+epH1/v/Y+Pz/6vDw/+Xy
+        8P/c+/7/Uu7++gDu/j4A9P4OAPH6BP///wD///8AAOHqAADo8gL///8AAu79OkTt/fXK+P//4/f3//f6
+        +v/z+vr/4Pn5/672//8T4fzVAO/+GQDy+wgA4uoC////AADe5wAA5+8CAPP9Bh3q/cyQ7P3/wPb+/+r2
+        9//3+vr/9fn4/+P19/+69///XuT8/xHq/p0A8/wIAODoBv///wAA0dkAAOryAgPv/T864/38fOv8/8D2
+        /v/r+v3/9vv8//b6+//k+f3/rPT9/4Ds/P8u5v7lAO/7JgDi6woAtLoCAMXMAgDr8wgF7f1kR9/9/3bu
+        /P+u9P7/1vv+/+n8/v/n+/7/yPj+/4Lt/P9y7/z/NuT+8gDu+T8A4+oQALW7AgDIzgIA6/MMAe/9RjXa
+        /vlW6/z/Wun8/5Lw/f+29Pn/sPP4/4rw/f9n7/z/cu7+/yfk/uIA8Po1AOTrFAC1uwIAyM8AAOryDAD1
+        /RkX4/67TNz9/5v1/P+F7/z/hu77/4rv+/+M8vz/gvH+/1Hi/v4K6v2ZAPT8IwDj6w7///8AANvkAADo
+        8AYA9v4SAPP9NRzi+8qV7P7+2Pb+/8H0+v+38/r/m/H+/0zi/v0Q5/ytAPb+MQD1/RcA4OcG////AADd
+        5wD///8AAPT9CAD3/hAA8/0hDOr6hDXl+9JL6/rmQen65SLj+8YE6/twAPT9JQD2/xkA8/sI////AP//
+        /wAA3eYA////AP///wAA7vgEAO/3CADw9gQA7PUMAOvzGQDr8xkA7fYMAPD2CgDv9woA7vgEAOzzAv//
+        /wD///8A/n8AAPw/AAD8PwAA/D8AAPgfAAD4HwAA+B8AAPAPAADgBwAA4AcAAOAHAADgBwAA4AcAAPAP
+        AAD4PwAA//8AAA==
+</value>
   </data>
 </root>
