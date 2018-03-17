@@ -50,10 +50,23 @@ namespace PiRexBot
         int                rightMotorPower = 0;
         bool               mouseDownOnControlButton = false;
 
-        uint               notifyCommandId = 0;
-        bool               commandSuccess  = false;
-        string             commandMessage  = null;
-        AutoResetEvent     commandProcessed;
+        // HTTP command result and event to wait on
+        class CommandResult
+        {
+            public bool            CommandSuccess;
+            public string          CommandMessage;
+            public AutoResetEvent  CommandEvent;
+        }
+
+        // Set of commands currently waiting for result
+        Dictionary<uint, CommandResult> waitingCommands = new Dictionary<uint,CommandResult>( );
+        // Queue of free events to use for command completion notification
+        Queue<AutoResetEvent>           freeEventsQueue = new Queue<AutoResetEvent>( );
+
+        // Camera settings form to change its different settings
+        CameraOptionsForm  cameraOptionsForm  = null;
+        int?               cameraOptionsFormX = null;
+        int?               cameraOptionsFormY = null;
 
         // Time out value used for waiting HTTP command's result.
         const int          commandTimeout  = 10000;
@@ -75,8 +88,10 @@ namespace PiRexBot
             // register for HTTP request completion events
             commandsThread.HttpCommandCompletion += commandsThread_HttpCommandCompletion;
 
-            // event used for signalling about complete requested
-            commandProcessed = new AutoResetEvent( false );
+            // events used for signalling about completed requests
+            freeEventsQueue.Enqueue( new AutoResetEvent( false ) );
+            freeEventsQueue.Enqueue( new AutoResetEvent( false ) );
+            freeEventsQueue.Enqueue( new AutoResetEvent( false ) );
 
             //  event used for signalling distance measurement thread to stop
             stopDistanceMeasurementEvent = new ManualResetEvent( false );
@@ -164,23 +179,42 @@ namespace PiRexBot
         }
 
         // Enqueue GET request and wait for its completion/response - check it is successful and looks valid
-        private void WaitRequestCompletion( string url )
+        private string WaitRequestCompletion( string url )
         {
-            notifyCommandId = commandsThread.EnqueueGetRequest( url );
-            if ( !commandProcessed.WaitOne( commandTimeout ) )
+            CommandResult commandResult = new CommandResult( );
+            uint commandId = 0;
+
+            lock ( waitingCommands )
+            {
+                commandResult.CommandEvent = freeEventsQueue.Dequeue( );
+
+                commandId = commandsThread.EnqueueGetRequest( url );
+
+                waitingCommands.Add( commandId, commandResult );
+            }
+
+            if ( !commandResult.CommandEvent.WaitOne( commandTimeout ) )
             {
                 throw new ApplicationException( "No command response" );
             }
 
-            if ( !commandSuccess )
+            if ( !commandResult.CommandSuccess )
             {
-                throw new ApplicationException( commandMessage );
+                throw new ApplicationException( commandResult.CommandMessage );
             }
 
-            if ( !commandMessage.Contains( "{\"status\":" ) )
+            if ( !commandResult.CommandMessage.Contains( "{\"status\":" ) )
             {
                 throw new ApplicationException( "Response status is missing - not a PiRex bot" );
             }
+
+            lock ( waitingCommands )
+            {
+                freeEventsQueue.Enqueue( commandResult.CommandEvent );
+                waitingCommands.Remove( commandId );
+            }
+
+            return commandResult.CommandMessage;
         }
 
         // Check connectivity to PiRex bot - check common URLs are accessible
@@ -191,24 +225,24 @@ namespace PiRexBot
             try
             {
                 // check if version information can be retrieved
-                WaitRequestCompletion( "/version" );
+                string resultMessage = WaitRequestCompletion( "/version" );
 
-                if ( !commandMessage.Contains( "\"product\":\"pirexbot\"" ) )
+                if ( !resultMessage.Contains( "\"product\":\"pirexbot\"" ) )
                 {
                     throw new ApplicationException( "Remote side does not look like a PiRex bot" );
                 }
 
                 // check if robot's information can be retrieved, which requires viewer access rights
-                WaitRequestCompletion( "/info" );
+                resultMessage = WaitRequestCompletion( "/info" );
 
                 // check if the bot is equipped with distance sensor
-                if ( commandMessage.Contains( "\"providesDistance\":\"true\"" ) )
+                if ( resultMessage.Contains( "\"providesDistance\":\"true\"" ) )
                 {
                     distanceMeasurementAvailable = true;
                 }
 
                 // check if motors' configuration can be retrieved, which requires configuration access rights
-                WaitRequestCompletion( "/motors/config" );
+                resultMessage = WaitRequestCompletion( "/motors/config" );
 
                 ret = true;
             }
@@ -344,15 +378,17 @@ namespace PiRexBot
         // Event handler for complete HTTP request
         void commandsThread_HttpCommandCompletion( object sender, HttpCommandEventArgs eventArgs )
         {
-            System.Diagnostics.Debug.WriteLine( "Command completed: {0}, {1}", eventArgs.Id, eventArgs.Success );
-            System.Diagnostics.Debug.WriteLine( eventArgs.Message );
+            //System.Diagnostics.Debug.WriteLine( "Command completed: {0}, {1}", eventArgs.Id, eventArgs.Success );
+            //System.Diagnostics.Debug.WriteLine( eventArgs.Message );
 
-            if ( notifyCommandId == eventArgs.Id )
+            lock ( waitingCommands )
             {
-                notifyCommandId = 0;
-                commandSuccess  = eventArgs.Success;
-                commandMessage  = eventArgs.Message;
-                commandProcessed.Set( );
+                if ( waitingCommands.ContainsKey( eventArgs.Id ) )
+                {
+                    waitingCommands[eventArgs.Id].CommandSuccess = eventArgs.Success;
+                    waitingCommands[eventArgs.Id].CommandMessage = eventArgs.Message;
+                    waitingCommands[eventArgs.Id].CommandEvent.Set( );
+                }
             }
         }
 
@@ -454,19 +490,19 @@ namespace PiRexBot
 
                 try
                 {
-                    WaitRequestCompletion( "/distance" );
+                    string resultMessage = WaitRequestCompletion( "/distance" );
 
-                    int valueIndex = commandMessage.IndexOf( "\"medianDistance\":\"" );
+                    int valueIndex = resultMessage.IndexOf( "\"medianDistance\":\"" );
 
                     if ( valueIndex != -1 )
                     {
                         valueIndex += 18;
 
-                        int delimiterIndex = commandMessage.IndexOf( '"', valueIndex );
+                        int delimiterIndex = resultMessage.IndexOf( '"', valueIndex );
 
                         if ( delimiterIndex != -1 )
                         {
-                            float distance = float.Parse( commandMessage.Substring( valueIndex, delimiterIndex - valueIndex ) );
+                            float distance = float.Parse( resultMessage.Substring( valueIndex, delimiterIndex - valueIndex ) );
 
                             strDistance = distance.ToString( "F2" ) + " cm";
                         }
@@ -544,7 +580,7 @@ namespace PiRexBot
         // Handler for the timer used to check for game pad's status
         private void gamePadTimer_Tick( object sender, EventArgs e )
         {
-            //if ( ( connected ) && ( gamePad != null ) )
+            if ( ( connected ) && ( gamePad != null ) )
             {
                 Joystick.Status status = gamePad.GetCurrentStatus( );
 
