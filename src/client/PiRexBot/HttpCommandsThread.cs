@@ -229,7 +229,11 @@ namespace PiRexBot
             lock ( sync )
             {
                 commandQueue.Clear( );
-                commandEvent.Reset( );
+
+                if ( commandEvent != null )
+                {
+                    commandEvent.Reset( );
+                }
             }
         }
 
@@ -238,13 +242,19 @@ namespace PiRexBot
         {
             lock ( sync )
             {
-                commandEvent.Reset( );
+                if ( commandEvent != null )
+                {
+                    commandEvent.Reset( );
+                }
 
                 commandQueue.RemoveAll( command => command.Url == url );
 
                 if ( commandQueue.Count != 0 )
                 {
-                    commandEvent.Set( );
+                    if ( commandEvent != null )
+                    {
+                        commandEvent.Set( );
+                    }
                 }
             }
         }
@@ -268,7 +278,10 @@ namespace PiRexBot
 
                 commandQueue.Add( command );
 
-                commandEvent.Set( );
+                if ( commandEvent != null )
+                {
+                    commandEvent.Set( );
+                }
             }
 
             return command.Id;
@@ -366,11 +379,17 @@ namespace PiRexBot
 
                 string responseString = System.Text.Encoding.UTF8.GetString( buffer );
 
-                HttpCommandCompletion( this, new HttpCommandEventArgs( commandToProcess.Id, true, responseString ) );
+                if ( HttpCommandCompletion != null )
+                {
+                    HttpCommandCompletion( this, new HttpCommandEventArgs( commandToProcess.Id, true, responseString ) );
+                }
             }
             catch ( Exception exception )
             {
-                HttpCommandCompletion( this, new HttpCommandEventArgs( commandToProcess.Id, false, exception.Message ) );
+                if ( HttpCommandCompletion != null )
+                {
+                    HttpCommandCompletion( this, new HttpCommandEventArgs( commandToProcess.Id, false, exception.Message ) );
+                }
             }
             finally
             {
