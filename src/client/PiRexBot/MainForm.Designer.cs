@@ -37,6 +37,7 @@
             this.aboutMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.connectionStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
+            this.motorsStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.fpsStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.videoModeCombo = new System.Windows.Forms.ComboBox();
@@ -51,6 +52,7 @@
             this.ipAddressBox = new System.Windows.Forms.TextBox();
             this.ipAddressLabel = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.videoSourcePlayer = new AForge.Controls.VideoSourcePlayer();
             this.botControlGroup = new System.Windows.Forms.GroupBox();
             this.rotateRightButton = new System.Windows.Forms.Button();
             this.moveBackwardButton = new System.Windows.Forms.Button();
@@ -64,11 +66,11 @@
             this.distanceLabel = new System.Windows.Forms.Label();
             this.fpsTimer = new System.Windows.Forms.Timer(this.components);
             this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.gamePadsCombo = new System.Windows.Forms.ComboBox();
             this.useGamepadButton = new System.Windows.Forms.Button();
+            this.gamePadsCombo = new System.Windows.Forms.ComboBox();
             this.gamePadTimer = new System.Windows.Forms.Timer(this.components);
-            this.motorsStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
-            this.videoSourcePlayer = new AForge.Controls.VideoSourcePlayer();
+            this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.cameraMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip.SuspendLayout();
             this.statusStrip.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -84,6 +86,7 @@
             this.menuStrip.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.menuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileMenuItem,
+            this.optionsToolStripMenuItem,
             this.helpToolStripMenuItem});
             this.menuStrip.Location = new System.Drawing.Point(0, 0);
             this.menuStrip.Name = "menuStrip";
@@ -117,7 +120,7 @@
             // aboutMenuItem
             // 
             this.aboutMenuItem.Name = "aboutMenuItem";
-            this.aboutMenuItem.Size = new System.Drawing.Size(119, 24);
+            this.aboutMenuItem.Size = new System.Drawing.Size(175, 24);
             this.aboutMenuItem.Text = "&About";
             this.aboutMenuItem.Click += new System.EventHandler(this.aboutMenuItem_Click);
             // 
@@ -141,9 +144,20 @@
             | System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
             this.connectionStatusLabel.BorderStyle = System.Windows.Forms.Border3DStyle.SunkenOuter;
             this.connectionStatusLabel.Name = "connectionStatusLabel";
-            this.connectionStatusLabel.Size = new System.Drawing.Size(650, 20);
+            this.connectionStatusLabel.Size = new System.Drawing.Size(689, 20);
             this.connectionStatusLabel.Spring = true;
             this.connectionStatusLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // motorsStatusLabel
+            // 
+            this.motorsStatusLabel.AutoSize = false;
+            this.motorsStatusLabel.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top) 
+            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Right) 
+            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
+            this.motorsStatusLabel.BorderStyle = System.Windows.Forms.Border3DStyle.SunkenOuter;
+            this.motorsStatusLabel.Name = "motorsStatusLabel";
+            this.motorsStatusLabel.Size = new System.Drawing.Size(200, 20);
+            this.motorsStatusLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // fpsStatusLabel
             // 
@@ -298,6 +312,15 @@
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Camera View";
             // 
+            // videoSourcePlayer
+            // 
+            this.videoSourcePlayer.BackColor = System.Drawing.SystemColors.ButtonShadow;
+            this.videoSourcePlayer.Location = new System.Drawing.Point(15, 25);
+            this.videoSourcePlayer.Name = "videoSourcePlayer";
+            this.videoSourcePlayer.Size = new System.Drawing.Size(642, 482);
+            this.videoSourcePlayer.TabIndex = 0;
+            this.videoSourcePlayer.VideoSource = null;
+            // 
             // botControlGroup
             // 
             this.botControlGroup.Controls.Add(this.rotateRightButton);
@@ -440,16 +463,6 @@
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Game pad to use";
             // 
-            // gamePadsCombo
-            // 
-            this.gamePadsCombo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.gamePadsCombo.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.gamePadsCombo.FormattingEnabled = true;
-            this.gamePadsCombo.Location = new System.Drawing.Point(10, 25);
-            this.gamePadsCombo.Name = "gamePadsCombo";
-            this.gamePadsCombo.Size = new System.Drawing.Size(325, 24);
-            this.gamePadsCombo.TabIndex = 0;
-            // 
             // useGamepadButton
             // 
             this.useGamepadButton.Location = new System.Drawing.Point(235, 53);
@@ -460,30 +473,36 @@
             this.useGamepadButton.UseVisualStyleBackColor = true;
             this.useGamepadButton.Click += new System.EventHandler(this.useGamepadButton_Click);
             // 
+            // gamePadsCombo
+            // 
+            this.gamePadsCombo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.gamePadsCombo.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.gamePadsCombo.FormattingEnabled = true;
+            this.gamePadsCombo.Location = new System.Drawing.Point(10, 25);
+            this.gamePadsCombo.Name = "gamePadsCombo";
+            this.gamePadsCombo.Size = new System.Drawing.Size(325, 24);
+            this.gamePadsCombo.TabIndex = 0;
+            // 
             // gamePadTimer
             // 
             this.gamePadTimer.Interval = 40;
             this.gamePadTimer.Tick += new System.EventHandler(this.gamePadTimer_Tick);
             // 
-            // motorsStatusLabel
+            // optionsToolStripMenuItem
             // 
-            this.motorsStatusLabel.AutoSize = false;
-            this.motorsStatusLabel.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top) 
-            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Right) 
-            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
-            this.motorsStatusLabel.BorderStyle = System.Windows.Forms.Border3DStyle.SunkenOuter;
-            this.motorsStatusLabel.Name = "motorsStatusLabel";
-            this.motorsStatusLabel.Size = new System.Drawing.Size(200, 20);
-            this.motorsStatusLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.optionsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.cameraMenuItem});
+            this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
+            this.optionsToolStripMenuItem.Size = new System.Drawing.Size(73, 24);
+            this.optionsToolStripMenuItem.Text = "Options";
             // 
-            // videoSourcePlayer
+            // cameraMenuItem
             // 
-            this.videoSourcePlayer.BackColor = System.Drawing.SystemColors.ButtonShadow;
-            this.videoSourcePlayer.Location = new System.Drawing.Point(15, 25);
-            this.videoSourcePlayer.Name = "videoSourcePlayer";
-            this.videoSourcePlayer.Size = new System.Drawing.Size(642, 482);
-            this.videoSourcePlayer.TabIndex = 0;
-            this.videoSourcePlayer.VideoSource = null;
+            this.cameraMenuItem.Name = "cameraMenuItem";
+            this.cameraMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F10;
+            this.cameraMenuItem.Size = new System.Drawing.Size(175, 24);
+            this.cameraMenuItem.Text = "&Camera";
+            this.cameraMenuItem.Click += new System.EventHandler(this.cameraMenuItem_Click);
             // 
             // MainForm
             // 
@@ -562,6 +581,8 @@
         private System.Windows.Forms.ComboBox gamePadsCombo;
         private System.Windows.Forms.Timer gamePadTimer;
         private System.Windows.Forms.ToolStripStatusLabel motorsStatusLabel;
+        private System.Windows.Forms.ToolStripMenuItem optionsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem cameraMenuItem;
     }
 }
 

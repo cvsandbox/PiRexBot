@@ -83,7 +83,8 @@ namespace PiRexBot
             videoModeCombo.SelectedIndex = 0;
             EnableConnectionControls( false );
 
-            ipAddressBox.Text = "192.168.0.12"; //"127.0.0.1";
+            ipAddressBox.Text = "192.168.0.12";
+            //ipAddressBox.Text = "127.0.0.1";
 
             // register for HTTP request completion events
             commandsThread.HttpCommandCompletion += commandsThread_HttpCommandCompletion;
@@ -163,6 +164,7 @@ namespace PiRexBot
         {
             // controls available after successful connection
             botControlGroup.Enabled = enable;
+            cameraMenuItem.Enabled  = enable;
 
             // controls required to configure/make connection
             ipAddressBox.Enabled   = !enable;
@@ -349,6 +351,11 @@ namespace PiRexBot
             fpsStatusLabel.Text        = string.Empty;
             motorsStatusLabel.Text     = string.Empty;
             connectionStatusLabel.Text = string.Empty;
+
+            if ( cameraOptionsForm != null )
+            {
+                cameraOptionsForm.Close( );
+            }
         }
 
         // Connect/Disconnect button clicked
@@ -603,6 +610,59 @@ namespace PiRexBot
                 rightMotorPower = (int) ( zAxis * 100 );
                 UpdateMotorsState( );
             }
+        }
+
+        // Show camera options
+        private void cameraMenuItem_Click( object sender, EventArgs e )
+        {
+            if ( connected )
+            {
+                if ( cameraOptionsForm == null )
+                {
+                    cameraOptionsForm = new CameraOptionsForm( );
+                    cameraOptionsForm.FormClosing += cameraOptionsForm_FormClosing;
+                    cameraOptionsForm.PropertyValueChanged += cameraOptionsForm_PropertyValueChanged;
+                }
+
+                if ( !cameraOptionsForm.Visible )
+                {
+                    cameraOptionsForm.Show( this );
+
+                    if ( ( cameraOptionsFormX.HasValue ) && ( cameraOptionsFormY.HasValue ) )
+                    {
+                        cameraOptionsForm.Left = cameraOptionsFormX.Value;
+                        cameraOptionsForm.Top  = cameraOptionsFormY.Value;
+                    }
+
+                    // get current settings of the camera
+                    try
+                    {
+                        string resultMessage = WaitRequestCompletion( "/camera/config" );
+
+                        cameraOptionsForm.SetCurrentSettings( resultMessage );
+                    }
+                    catch ( ApplicationException ex )
+                    {
+                        ErrorBox( "Failed getting camera's settings:\n\n" + ex.Message );
+                    }
+                }
+            }
+        }
+
+        // A property has changed its value in the camera options form
+        void cameraOptionsForm_PropertyValueChanged( string name, string value )
+        {
+            string postData = string.Format( "{{\"{0}\":\"{1}\"}}", name, value );
+
+            commandsThread.EnqueuePostRequest( "/camera/config", postData );
+        }
+
+        // The camera's options form is about to close
+        void cameraOptionsForm_FormClosing( object sender, FormClosingEventArgs e )
+        {
+            cameraOptionsFormX = cameraOptionsForm.Left;
+            cameraOptionsFormY = cameraOptionsForm.Top;
+            cameraOptionsForm  = null;
         }
     }
 }
