@@ -405,11 +405,6 @@ map<string, string> XRaspiCameraConfig::GetAllProperties( ) const
 
 // ------------------------------------------------------------------------------------------
 
-XRaspiCameraPropsInfo::XRaspiCameraPropsInfo( const shared_ptr<XRaspiCamera>& camera ) :
-    mCamera( camera )
-{
-}
-
 XError XRaspiCameraPropsInfo::GetProperty( const std::string& propertyName, std::string& value ) const
 {
     XError  ret = XError::Success;

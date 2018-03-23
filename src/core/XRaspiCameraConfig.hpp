@@ -43,14 +43,9 @@ private:
 class XRaspiCameraPropsInfo : public IObjectInformation
 {
 public:
-    XRaspiCameraPropsInfo( const std::shared_ptr<XRaspiCamera>& camera );
-
     XError GetProperty( const std::string& propertyName, std::string& value ) const;
 
     std::map<std::string, std::string> GetAllProperties( ) const;
-
-private:
-    std::shared_ptr<XRaspiCamera> mCamera;
 };
 
 #endif // XRASPI_CAMERA_CONFIG_HPP
