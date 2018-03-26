@@ -481,7 +481,7 @@ int main( int argc, char* argv[] )
     server.AddHandler( make_shared<XObjectInformationRequestHandler>( "/version", make_shared<XObjectInformationMap>( versionInfo ) ) ).
            AddHandler( make_shared<XObjectConfigurationRequestHandler>( "/camera/config", xcameraConfig ), configGroup ).
            AddHandler( make_shared<XObjectConfigurationRequestHandler>( "/motors/config", motorsController ), configGroup ).
-           AddHandler( make_shared<XObjectInformationRequestHandler>( "/camera/properties", make_shared<XRaspiCameraPropsInfo>( xcamera ) ), configGroup ).
+           AddHandler( make_shared<XObjectInformationRequestHandler>( "/camera/properties", make_shared<XRaspiCameraPropsInfo>( ) ), configGroup ).
            AddHandler( make_shared<XObjectInformationRequestHandler>( "/camera/info", make_shared<XObjectInformationMap>( cameraInfo ) ), viewersGroup ).
            AddHandler( make_shared<XObjectInformationRequestHandler>( "/info", make_shared<XObjectInformationMap>( botInfo ) ), viewersGroup ).
            AddHandler( video2web.CreateJpegHandler( "/camera/jpeg" ), viewersGroup ).
