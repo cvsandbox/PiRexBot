@@ -21,7 +21,11 @@
 #ifndef PIREXBOT_CONFIG_H
 #define PIREXBOT_CONFIG_H
 
-// ===== LEDs 'configuration =====
+/* IMPORTANT: All of the configuration below is done using physical pin numbering,
+   not the GPIO logical numbering.
+ */
+
+// ===== LED's configuration =====
 
 // Pin number for the LED, which is switched on while the PiRex Bot application is running
 #define BOT_PIN_ON_LED (7)
