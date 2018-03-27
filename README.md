@@ -8,6 +8,6 @@ Although a reference robot’s design is provided, the project is mainly aimed t
 The PiRex software provides embedded web UI, so the robot can be controlled directly from a web browser. In addition, it exposes REST API to interface with other applications. As a reference, the project provides a simple .NET client application, which allows more agile control of the robot by using game pad devices. The application also can be of use for adding image processing and computer vision based features to the robot.
 
 * Reference robot design
-* [Building the source code](Running.md)
+* [Building the source code](Building.md)
 * Running the application
 * Controlling robot from other applications (WEB API)
