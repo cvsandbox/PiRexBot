@@ -151,4 +151,4 @@ http://ip:port/camera/properties
 The API provides description of all supported camera's configuration properties - types of properties, titles, acceptable range of values, default value, etc. It was inherited from the cam2web project, where it does make sense, since that projects supports number of platforms and camera APIs. However, for PiRex it is of little use really - only one camera type is supported for now.
 
 ### Access rights
-Accessing JPEG, MJPEG and robot's information URLs is available to those who have view access rights. Access to robot's configuration URLs (camera and motors) is available to those who have configuration access. The version URL is accessible to anyone. See Running PiRex for more information about access rights.
+Accessing JPEG, MJPEG and robot's information URLs is available to those who have view access rights. Access to robot's configuration URLs (camera and motors) is available to those who have configuration access. The version URL is accessible to anyone. See [Running PiRex](Running.md) for more information about access rights.
