@@ -10,4 +10,4 @@ The PiRex software provides embedded web UI, so the robot can be controlled dire
 * Reference robot design
 * [Building the source code](Building.md)
 * Running the application
-* Controlling robot from other applications (WEB API)
+* [Controlling robot from other applications (WEB API)](WebAPI.md)
