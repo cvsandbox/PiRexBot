@@ -12,7 +12,9 @@ The PiRex software provides embedded web UI, so the robot can be controlled dire
 * Running the application
 * [Controlling robot from other applications (WEB API)](WebAPI.md)
 
+
 An example of a built robot:
+
 ![pirex_bot](https://github.com/cvsandbox/PiRexBot/blob/master/images/pirex_robot.jpg)
 
 [YouTube video showing PiRex in action](https://youtu.be/dM66XZxTvJs)
