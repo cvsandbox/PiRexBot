@@ -53,4 +53,4 @@ The second layer of the build holds the Raspberry Pi and another small breakout 
 
 ![pirex_bot](images/pirex_layer2.jpg)
 
-For more information one the sample build and the hardware components in use, check the Code Project article describing it.
+For more information one the sample build and the hardware components in use, check the [Code Project article](https://www.codeproject.com/Articles/1237052/PiRex-remote-controlled-Raspberry-Pi-based-robot) describing it.
