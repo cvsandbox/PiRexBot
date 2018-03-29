@@ -10,7 +10,7 @@ Once the application is running, it starts its embedded web server providing acc
 
 While PiRex application is running, the robot can be controlled from a preferred browser – all default web UI is embedded directly into the binary, so no extra web server or content is required. Simply type robot's IP address:port into a browser and you are ready to go.
 
-![web_ui](https://github.com/cvsandbox/PiRexBot/blob/master/images/pirex_web.jpg)
+![web_ui](images/pirex_web.jpg)
 
 The default view simply shows current view from the robot's camera. However, the "Control" tab allows controlling the robot's movement and getting distance measurements, while the "Camera" tab allows changing different camera's settings.
 
@@ -18,6 +18,6 @@ The default view simply shows current view from the robot's camera. However, the
 
 In addition to the web browser control, it is possible to have a dedicated application for robot manipulation through the exposed [WEB API](WebAPI.md). A sample .NET client application is provided, which demonstrates the use of this API and allows controlling PiRex robot from C# code.
 
-![web_ui](https://github.com/cvsandbox/PiRexBot/blob/master/images/pirex_client.jpg)
+![web_ui](images/pirex_client.jpg)
 
 Controlling the robot from a native application may provide extra flexibility and features. For example, the provided .NET client application demonstrates how to control the robot using a game pad device, which may give better agility to the robot's movement. Another example could be using some computer vision SDK and adding some video processing for the robot's camera.

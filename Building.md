@@ -2,7 +2,7 @@
 
 Before PiRex can be built in release configuration, it is required to build web2h tool provided with it, which translates some of the common web files (HTML, CSS, JS, JPEG and PNG) into header files. Those are then compiled and linked into the PiRex executable, so it could provide default web interface without relying on external files.
 
-If building in debug configuration however, the web2h is not required – all web content is served from files located in ./web folder.
+If building in debug configuration however, the web2h is not required – all web content is served from files located in ./web folder (which is populated automatically during build process).
 
 Another thing to keep in mind before starting a build is the **BotConfig.h** header file. It contains number of #define's allowing to specify which Raspberry Pi’s pins are used for which purpose. Changes to this file are required only in the case if target robot build is different from the reference design.
 
